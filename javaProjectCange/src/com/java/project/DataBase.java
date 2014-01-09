@@ -244,7 +244,7 @@ public class DataBase {
             
             pst = conn.prepareStatement("INSERT INTO rates(RateName, Rate) VALUES (?, ?)");
             pst.setString(1, "EUR");
-            pst.setDouble(2, 0.511292);
+            pst.setDouble(2, 1.95583);
             pst.executeUpdate();
             pst.close();
             
@@ -268,7 +268,7 @@ public class DataBase {
                     
                     pst = conn.prepareStatement("INSERT INTO rates(RateName, Rate) VALUES (?, ?)");
                     pst.setString(1, codeString);
-                    pst.setDouble(2, reverseDouble);
+                    pst.setDouble(2, (1/reverseDouble));
                     pst.executeUpdate();
                 }
             }
@@ -395,7 +395,7 @@ public class DataBase {
             
             pst.close();
             resultSet.close();
- 
+            
             pst = conn.prepareStatement("UPDATE stock SET stock = ? WHERE code = ?");
             
             pst.setDouble(1, amount);
@@ -434,6 +434,23 @@ public class DataBase {
                 }
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
+            }
+        }
+    }
+    
+    public void updateProfit(double amount){
+        try {
+            pst = conn.prepareStatement("INSERT INTO log(`date`, `currency_from`, `currency_from_amount`, `rate`, `currency_to`, `currency_to_amount`) VALUES(?,?,?,?,?,?)");
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            if (pst != null) {
+                try {
+                    pst.close();
+                } catch (SQLException e) {
+                    System.err.println(e.getMessage());
+                }
             }
         }
     }
