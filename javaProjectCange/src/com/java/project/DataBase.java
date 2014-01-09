@@ -383,24 +383,39 @@ public class DataBase {
             pst = conn.prepareStatement("SELECT * FROM stock WHERE code = ?");
             pst.setString(1, codeFrom);
             resultSet = pst.executeQuery();
-            String name = resultSet.getString(2);
-            double amount = resultSet.getDouble(3);
+            
+            String name = null;
+            double amount = 0.0D;
+            
+            if (resultSet.next()) {
+                name = resultSet.getString(2);
+                amount = resultSet.getDouble(3);
+                amount += Double.parseDouble(amountFrom);
+            }
+            
             pst.close();
+            resultSet.close();
  
-            amount += Double.parseDouble(amountFrom);
  
             pst = conn.prepareStatement("UPDATE stock SET stock = ? WHERE code = ?");
+            
             pst.setDouble(1, amount);
             pst.setString(2, name);
             pst.executeUpdate();
+            
             pst.close();
  
             pst = conn.prepareStatement("SELECT * FROM stock WHERE code = ?");
             pst.setString(1, codeTo);
             resultSet = pst.executeQuery();
-            name = resultSet.getString(2);
-            amount = resultSet.getDouble(3);
+            
+            if (resultSet.next()) {
+                name = resultSet.getString(2);
+                amount = resultSet.getDouble(3);
+            }
+            
             pst.close();
+            resultSet.close();
  
             amount -= Double.parseDouble(amountTo);
  
@@ -408,7 +423,6 @@ public class DataBase {
             pst.setDouble(1, amount);
             pst.setString(2, name);
             pst.executeUpdate();
- 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         } finally {
@@ -418,9 +432,6 @@ public class DataBase {
                 }
                 if (pst != null) {
                     pst.close();
-                }
-                if (conn != null) {
-                    conn.close();
                 }
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
