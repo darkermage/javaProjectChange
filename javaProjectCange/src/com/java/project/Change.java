@@ -15,6 +15,7 @@ public class Change extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         tabbedPanel = new javax.swing.JTabbedPane();
         tablesPanel = new javax.swing.JPanel();
         scrollPanelOne = new javax.swing.JScrollPane();
@@ -38,7 +39,7 @@ public class Change extends javax.swing.JFrame {
         saveStockButton = new javax.swing.JButton();
         stockLabel = new javax.swing.JLabel();
         chooseDate = new com.toedter.calendar.JDateChooser();
-        convertorPanel = new javax.swing.JPanel();
+        buttonGroup = new javax.swing.JPanel();
         chooseCodeFrom = new javax.swing.JComboBox();
         exchangeButton = new javax.swing.JButton();
         chooseCodeTo = new javax.swing.JComboBox();
@@ -278,9 +279,11 @@ public class Change extends javax.swing.JFrame {
         amountToField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         amountToField.setPreferredSize(new java.awt.Dimension(120, 20));
 
+        buttonGroup1.add(buyRadio);
         buyRadio.setSelected(true);
         buyRadio.setText("Buy");
 
+        buttonGroup1.add(sellRadio);
         sellRadio.setText("Sell");
 
         invoiceCheck.setText("Invoice");
@@ -294,23 +297,23 @@ public class Change extends javax.swing.JFrame {
         outputField.setPreferredSize(new java.awt.Dimension(145, 20));
         outputField.setValue(0);
 
-        javax.swing.GroupLayout convertorPanelLayout = new javax.swing.GroupLayout(convertorPanel);
-        convertorPanel.setLayout(convertorPanelLayout);
-        convertorPanelLayout.setHorizontalGroup(
-            convertorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(convertorPanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout buttonGroupLayout = new javax.swing.GroupLayout(buttonGroup);
+        buttonGroup.setLayout(buttonGroupLayout);
+        buttonGroupLayout.setHorizontalGroup(
+            buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(buttonGroupLayout.createSequentialGroup()
                 .addGap(153, 153, 153)
-                .addGroup(convertorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(convertorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(amountFromField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(amoutFromLabel, javax.swing.GroupLayout.Alignment.LEADING))
                     .addComponent(chooseCodeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
-                .addGroup(convertorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(outputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(convertorPanelLayout.createSequentialGroup()
-                        .addGroup(convertorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(convertorPanelLayout.createSequentialGroup()
+                    .addGroup(buttonGroupLayout.createSequentialGroup()
+                        .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(buttonGroupLayout.createSequentialGroup()
                                 .addComponent(buyRadio)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(sellRadio)
@@ -318,31 +321,31 @@ public class Change extends javax.swing.JFrame {
                                 .addComponent(invoiceCheck))
                             .addComponent(exchangeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(20, 20, 20)
-                        .addGroup(convertorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(amountToField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(chooseCodeTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(amoutToLabel))))
                 .addContainerGap(153, Short.MAX_VALUE))
         );
-        convertorPanelLayout.setVerticalGroup(
-            convertorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(convertorPanelLayout.createSequentialGroup()
+        buttonGroupLayout.setVerticalGroup(
+            buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(buttonGroupLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(convertorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(convertorPanelLayout.createSequentialGroup()
+                .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(buttonGroupLayout.createSequentialGroup()
                         .addComponent(amoutToLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(amountToField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(40, 40, 40)
                         .addComponent(chooseCodeTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(convertorPanelLayout.createSequentialGroup()
+                    .addGroup(buttonGroupLayout.createSequentialGroup()
                         .addComponent(amoutFromLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(convertorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(amountFromField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(exchangeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(convertorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(buyRadio)
                             .addComponent(sellRadio)
                             .addComponent(invoiceCheck)
@@ -352,7 +355,7 @@ public class Change extends javax.swing.JFrame {
                 .addContainerGap(236, Short.MAX_VALUE))
         );
 
-        tabbedPanel.addTab("Convertor", convertorPanel);
+        tabbedPanel.addTab("Convertor", buttonGroup);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -457,12 +460,13 @@ public class Change extends javax.swing.JFrame {
     private javax.swing.JLabel amoutToLabel;
     private javax.swing.JLabel bnbLabel;
     private javax.swing.JTable bnbRateTable;
+    private javax.swing.JPanel buttonGroup;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JRadioButton buyRadio;
     private javax.swing.JPanel cashierPanel;
     private javax.swing.JComboBox chooseCodeFrom;
     private javax.swing.JComboBox chooseCodeTo;
     private com.toedter.calendar.JDateChooser chooseDate;
-    private javax.swing.JPanel convertorPanel;
     private javax.swing.JLabel dateLabel;
     private javax.swing.JButton editLocalButton;
     private javax.swing.JButton editStockButton;
