@@ -420,10 +420,12 @@ public class Change extends javax.swing.JFrame {
             rate = converter.getRate();
         }
         
-        new DataBase().changeCurrencyInStock(((Number) amountFromField.getValue()).doubleValue(), String.valueOf(chooseCodeFrom.getSelectedItem()), 
+        DataBase dataBase = new DataBase();
+        dataBase.changeCurrencyInStock(((Number) amountFromField.getValue()).doubleValue(), String.valueOf(chooseCodeFrom.getSelectedItem()), 
                 ((Number) amountFromField.getValue()).doubleValue(), String.valueOf(chooseCodeTo.getSelectedItem()));
 
-        new DataBase().updateLog(new Date(new java.util.Date().getTime()), (String) chooseCodeFrom.getSelectedItem(), Double.parseDouble(String.valueOf(amountFromField.getValue())), rate, (String) chooseCodeTo.getSelectedItem(), Double.parseDouble(String.valueOf(amountToField.getValue())));
+        dataBase.updateLog(new Date(new java.util.Date().getTime()), String.valueOf(chooseCodeFrom.getSelectedItem()), Double.parseDouble(String.valueOf(amountFromField.getValue())), rate, 
+                String.valueOf(chooseCodeTo.getSelectedItem()), Double.parseDouble(String.valueOf(amountToField.getValue())));
         
         if (invoiceCheck.isSelected()) {
             new InvoiceDialog(this, true).setVisible(true);
