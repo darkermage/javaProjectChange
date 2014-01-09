@@ -364,6 +364,7 @@ public class Change extends javax.swing.JFrame {
         if (buyRadio.isSelected()) {
             Converter converter = new Converter(localRateTable, i, j);
             amountToField.setValue(converter.convertValue(amountFromField.getValue()));
+            new DataBase().changeCurrencyInStock((String) amountFromField.getValue(), (String) chooseCodeFrom.getSelectedItem(),(String) amountToField.getValue() , (String) chooseCodeTo.getSelectedItem());
         } else {
             Converter converter = new Converter(localRateTable, j, i);
             amountToField.setValue(converter.convertValue(amountFromField.getValue()));

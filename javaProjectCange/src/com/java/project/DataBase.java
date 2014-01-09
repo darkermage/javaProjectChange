@@ -235,7 +235,19 @@ public class DataBase {
             String codeString = null;
             String reverseString = null;
             double reverseDouble = 0.0D;
-
+            
+            pst = conn.prepareStatement("INSERT INTO rates(RateName, Rate) VALUES (?, ?)");
+            pst.setString(1, "BGR");
+            pst.setDouble(2, 1);
+            pst.executeUpdate();
+            pst.close();
+            
+            pst = conn.prepareStatement("INSERT INTO rates(RateName, Rate) VALUES (?, ?)");
+            pst.setString(1, "EUR");
+            pst.setDouble(2, 0.511292);
+            pst.executeUpdate();
+            pst.close();
+            
             for (int temp = 1; temp < nList.getLength() - 1; temp++) {
                 Node nNode = nList.item(temp);
 
@@ -366,7 +378,6 @@ public class DataBase {
         }
     }
     
-   
     public void changeCurrencyInStock(String amountFrom, String codeFrom, String amountTo, String codeTo) {
         try {
             pst = conn.prepareStatement("SELECT * FROM stock WHERE code = ?");
@@ -416,6 +427,8 @@ public class DataBase {
             }
         }
     }
+    
+    
     
 //    public Object[][] getStock(){
 //        Object[][] ret;
