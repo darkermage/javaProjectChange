@@ -237,7 +237,7 @@ public class Change extends javax.swing.JFrame {
         chooseCodeTo.setModel(new javax.swing.DefaultComboBoxModel(new DataBase().getCodes()));
         chooseCodeTo.setPreferredSize(new java.awt.Dimension(120, 20));
 
-        amountFromField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,###"))));
+        amountFromField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
         amountFromField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         amountFromField.setPreferredSize(new java.awt.Dimension(120, 20));
         amountFromField.addActionListener(new java.awt.event.ActionListener() {
@@ -247,7 +247,7 @@ public class Change extends javax.swing.JFrame {
         });
 
         amountToField.setEditable(false);
-        amountToField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,###"))));
+        amountToField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
         amountToField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         amountToField.setPreferredSize(new java.awt.Dimension(120, 20));
 
