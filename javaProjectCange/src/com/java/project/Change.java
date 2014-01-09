@@ -1,32 +1,33 @@
 package com.java.project;
 
-import javax.swing.JTable;
+import java.text.NumberFormat;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class Change extends javax.swing.JFrame {
 
     public Change() {
         initComponents();
+        
         new DataBase().updateCurrency();
         new DataBase().updateLocalTable(localRateTable);
-        stockTable.getModel().addTableModelListener(new TableModelListener() {
         
+        stockTable.getModel().addTableModelListener(new TableModelListener() {
             @Override
-        public void tableChanged(TableModelEvent e) {
-            int i = stockTable.getSelectedRow();
-            new DataBase().updateStock( Double.parseDouble( (String)stockTable.getModel().getValueAt(i, 2)), Integer.parseInt((String) stockTable.getModel().getValueAt(i, 0)));    
-        }
+            public void tableChanged(TableModelEvent e) {
+                int i = stockTable.getSelectedRow();
+                new DataBase().updateStock((double) stockTable.getModel().getValueAt(i, 2), (int) stockTable.getModel().getValueAt(i, 0));    
+            }
         });
         
         localRateTable.getModel().addTableModelListener(new TableModelListener() {
-        
             @Override
-        public void tableChanged(TableModelEvent e) {
-            int i = localRateTable.getSelectedRow();
-            new DataBase().updateLocal( Integer.parseInt((String) localRateTable.getModel().getValueAt(i, 0) ), Double.parseDouble( (String)localRateTable.getModel().getValueAt(i, 2) ), Double.parseDouble( (String)localRateTable.getModel().getValueAt(i, 3) ));   
-        }
+            public void tableChanged(TableModelEvent e) {
+                int i = localRateTable.getSelectedRow();
+                new DataBase().updateLocal((int) localRateTable.getModel().getValueAt(i, 0), (double) localRateTable.getModel().getValueAt(i, 2), (double) localRateTable.getModel().getValueAt(i, 3));   
+            }
         });
     }
 
@@ -72,9 +73,15 @@ public class Change extends javax.swing.JFrame {
 
         scrollPanelOne.setPreferredSize(new java.awt.Dimension(300, 260));
 
-        bnbRateTable.setModel(new javax.swing.table.DefaultTableModel(new Object[] { "Rate Name", "Rate" }, 0));
-        bnbRateTable.setEnabled(false);
+        bnbRateTable.setModel(new javax.swing.table.DefaultTableModel(new Object[] { "Rate Name", "Rate" }, 0) {
+            public boolean isCellEditable (int row, int col) {
+                return false;
+            }
+        });
         new DataBase().updateBNBTable(bnbRateTable);
+
+        javax.swing.table.TableColumn column = bnbRateTable.getColumnModel().getColumn(1);
+        column.setCellRenderer(new DataRenderer());
         scrollPanelOne.setViewportView(bnbRateTable);
 
         bnbLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -82,9 +89,31 @@ public class Change extends javax.swing.JFrame {
 
         scrollPanelTwo.setPreferredSize(new java.awt.Dimension(300, 260));
 
-        localRateTable.setModel(new javax.swing.table.DefaultTableModel(new Object[] { "", "Rate Name", "Buy", "Sell" }, 0));
+        localRateTable.setModel(new javax.swing.table.DefaultTableModel(new Object[] { "", "Rate Name", "Buy", "Sell" }, 0) {
+            public boolean isCellEditable (int row, int col) {
+                if (col == 1) {
+                    return false;
+                }
+
+                return true;
+            }
+
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         javax.swing.table.TableColumn tc = localRateTable.getColumnModel().getColumn(0);
         localRateTable.removeColumn(tc);
+
+        column = localRateTable.getColumnModel().getColumn(1);
+        column.setCellRenderer(new DataRenderer());
+
+        column = localRateTable.getColumnModel().getColumn(2);
+        column.setCellRenderer(new DataRenderer());
         scrollPanelTwo.setViewportView(localRateTable);
 
         localRatesLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -133,208 +162,231 @@ public class Change extends javax.swing.JFrame {
 
         scrollPanelThree.setPreferredSize(new java.awt.Dimension(300, 260));
 
-        stockTable.setModel(new javax.swing.table.DefaultTableModel(new Object[] { "", "Code", "Stock" }, 0));
-        stockTable.getTableHeader().setReorderingAllowed(false);
-        tc = stockTable.getColumnModel().getColumn(0);
-        stockTable.removeColumn(tc);
-
-        new DataBase().updateStockTable(stockTable);
-        stockTable.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                stockTablePropertyChange(evt);
+        stockTable.setModel(new javax.swing.table.DefaultTableModel(new Object[] { "", "Code", "Stock" }, 0) {            public boolean isCellEditable (int row, int col) {
+            if (col == 1) {
+                return false;
             }
-        });
-        scrollPanelThree.setViewportView(stockTable);
 
-        profitField.setEditable(false);
-        profitField.setText("0");
+            return true;
+        }
 
-        profitLabel.setText("Profit");
+        Class[] types = new Class [] {
+            java.lang.Integer.class, java.lang.String.class, java.lang.Double.class
+        };
 
-        dateLabel.setText("Date");
+        public Class getColumnClass(int columnIndex) {
+            return types [columnIndex];
+        }
+    });
+    stockTable.getTableHeader().setReorderingAllowed(false);
+    tc = stockTable.getColumnModel().getColumn(0);
+    stockTable.removeColumn(tc);
 
-        scrollPanelFour.setPreferredSize(new java.awt.Dimension(350, 260));
+    tc = stockTable.getColumnModel().getColumn(1);
+    tc.setCellRenderer(new DataRenderer());
 
-        logArea.setEditable(false);
-        logArea.setColumns(20);
-        logArea.setRows(5);
-        scrollPanelFour.setViewportView(logArea);
+    new DataBase().updateStockTable(stockTable);
+    scrollPanelThree.setViewportView(stockTable);
 
-        stockLabel.setText("Stock");
+    profitField.setEditable(false);
+    profitField.setText("0");
 
-        chooseDate.setDate(new java.util.Date());
-        chooseDate.setDateFormatString("dd-MM-yyyy");
-        chooseDate.setPreferredSize(new java.awt.Dimension(150, 20));
-        chooseDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                chooseDatePropertyChange(evt);
-            }
-        });
+    profitLabel.setText("Profit");
 
-        javax.swing.GroupLayout cashierPanelLayout = new javax.swing.GroupLayout(cashierPanel);
-        cashierPanel.setLayout(cashierPanelLayout);
-        cashierPanelLayout.setHorizontalGroup(
-            cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(cashierPanelLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrollPanelThree, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(stockLabel))
-                .addGap(40, 40, 40)
-                .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(cashierPanelLayout.createSequentialGroup()
-                        .addComponent(dateLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chooseDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(cashierPanelLayout.createSequentialGroup()
-                        .addComponent(profitLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(profitField, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(scrollPanelFour, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25))
-        );
-        cashierPanelLayout.setVerticalGroup(
-            cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(cashierPanelLayout.createSequentialGroup()
-                .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, cashierPanelLayout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(stockLabel)
-                        .addGap(10, 10, 10))
-                    .addGroup(cashierPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(chooseDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dateLabel))))
-                .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrollPanelThree, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(scrollPanelFour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(profitField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(profitLabel))
-                .addContainerGap(54, Short.MAX_VALUE))
-        );
+    dateLabel.setText("Date");
 
-        tabbedPanel.addTab("Cashier", cashierPanel);
+    scrollPanelFour.setPreferredSize(new java.awt.Dimension(350, 260));
 
-        chooseCodeFrom.setModel(new javax.swing.DefaultComboBoxModel(new DataBase().getCodes()));
-        chooseCodeFrom.setPreferredSize(new java.awt.Dimension(120, 20));
-        chooseCodeFrom.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chooseCodeFromActionPerformed(evt);
-            }
-        });
+    logArea.setEditable(false);
+    logArea.setColumns(20);
+    logArea.setRows(5);
+    scrollPanelFour.setViewportView(logArea);
 
-        exchangeButton.setText("Exchange");
-        exchangeButton.setPreferredSize(new java.awt.Dimension(145, 60));
-        exchangeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exchangeButtonActionPerformed(evt);
-            }
-        });
+    stockLabel.setText("Stock");
 
-        chooseCodeTo.setModel(new javax.swing.DefaultComboBoxModel(new DataBase().getCodes()));
-        chooseCodeTo.setPreferredSize(new java.awt.Dimension(120, 20));
+    chooseDate.setDate(new java.util.Date());
+    chooseDate.setDateFormatString("dd-MM-yyyy");
+    chooseDate.setPreferredSize(new java.awt.Dimension(150, 20));
+    chooseDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+        public void propertyChange(java.beans.PropertyChangeEvent evt) {
+            chooseDatePropertyChange(evt);
+        }
+    });
 
-        amountFromField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
-        amountFromField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        amountFromField.setPreferredSize(new java.awt.Dimension(120, 20));
-        amountFromField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                amountFromFieldActionPerformed(evt);
-            }
-        });
+    javax.swing.GroupLayout cashierPanelLayout = new javax.swing.GroupLayout(cashierPanel);
+    cashierPanel.setLayout(cashierPanelLayout);
+    cashierPanelLayout.setHorizontalGroup(
+        cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(cashierPanelLayout.createSequentialGroup()
+            .addGap(25, 25, 25)
+            .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(scrollPanelThree, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(stockLabel))
+            .addGap(40, 40, 40)
+            .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(cashierPanelLayout.createSequentialGroup()
+                    .addComponent(dateLabel)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(chooseDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(cashierPanelLayout.createSequentialGroup()
+                    .addComponent(profitLabel)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(profitField, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(scrollPanelFour, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(25, 25, 25))
+    );
+    cashierPanelLayout.setVerticalGroup(
+        cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(cashierPanelLayout.createSequentialGroup()
+            .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, cashierPanelLayout.createSequentialGroup()
+                    .addGap(15, 15, 15)
+                    .addComponent(stockLabel)
+                    .addGap(10, 10, 10))
+                .addGroup(cashierPanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(chooseDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(dateLabel))))
+            .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(scrollPanelThree, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrollPanelFour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(profitField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(profitLabel))
+            .addContainerGap(54, Short.MAX_VALUE))
+    );
 
-        amountToField.setEditable(false);
-        amountToField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
-        amountToField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        amountToField.setPreferredSize(new java.awt.Dimension(120, 20));
+    tabbedPanel.addTab("Cashier", cashierPanel);
 
-        buttonGroup1.add(buyRadio);
-        buyRadio.setSelected(true);
-        buyRadio.setText("Buy");
+    chooseCodeFrom.setModel(new javax.swing.DefaultComboBoxModel(new DataBase().getCodes()));
+    chooseCodeFrom.setPreferredSize(new java.awt.Dimension(120, 20));
 
-        buttonGroup1.add(sellRadio);
-        sellRadio.setText("Sell");
+    exchangeButton.setText("Exchange");
+    exchangeButton.setPreferredSize(new java.awt.Dimension(145, 60));
+    exchangeButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            exchangeButtonActionPerformed(evt);
+        }
+    });
 
-        invoiceCheck.setText("Invoice");
+    chooseCodeTo.setModel(new javax.swing.DefaultComboBoxModel(new DataBase().getCodes()));
+    chooseCodeTo.setPreferredSize(new java.awt.Dimension(120, 20));
 
-        amoutFromLabel.setText("Amount");
+    amountFromField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
+    amountFromField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+    amountFromField.setPreferredSize(new java.awt.Dimension(120, 20));
+    amountFromField.setValue(new Double(0));
 
-        amoutToLabel.setText("Amount");
+    amountToField.setEditable(false);
+    amountToField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
+    amountToField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+    amountToField.setPreferredSize(new java.awt.Dimension(120, 20));
 
-        javax.swing.GroupLayout buttonGroupLayout = new javax.swing.GroupLayout(buttonGroup);
-        buttonGroup.setLayout(buttonGroupLayout);
-        buttonGroupLayout.setHorizontalGroup(
-            buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(buttonGroupLayout.createSequentialGroup()
-                .addGap(153, 153, 153)
-                .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(amountFromField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(amoutFromLabel, javax.swing.GroupLayout.Alignment.LEADING))
-                    .addComponent(chooseCodeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(buttonGroupLayout.createSequentialGroup()
-                        .addComponent(buyRadio)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sellRadio)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(invoiceCheck))
-                    .addComponent(exchangeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+    buttonGroup1.add(buyRadio);
+    buyRadio.setSelected(true);
+    buyRadio.setText("Buy");
+
+    buttonGroup1.add(sellRadio);
+    sellRadio.setText("Sell");
+
+    invoiceCheck.setText("Invoice");
+
+    amoutFromLabel.setText("Amount");
+
+    amoutToLabel.setText("Amount");
+
+    javax.swing.GroupLayout buttonGroupLayout = new javax.swing.GroupLayout(buttonGroup);
+    buttonGroup.setLayout(buttonGroupLayout);
+    buttonGroupLayout.setHorizontalGroup(
+        buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(buttonGroupLayout.createSequentialGroup()
+            .addGap(153, 153, 153)
+            .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(amountFromField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(amoutFromLabel, javax.swing.GroupLayout.Alignment.LEADING))
+                .addComponent(chooseCodeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(20, 20, 20)
+            .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(buttonGroupLayout.createSequentialGroup()
+                    .addComponent(buyRadio)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(sellRadio)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(invoiceCheck))
+                .addComponent(exchangeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(20, 20, 20)
+            .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(amountToField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(chooseCodeTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(amoutToLabel))
+            .addContainerGap(153, Short.MAX_VALUE))
+    );
+    buttonGroupLayout.setVerticalGroup(
+        buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(buttonGroupLayout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(buttonGroupLayout.createSequentialGroup()
+                    .addComponent(amoutToLabel)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(amountToField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(chooseCodeTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(amoutToLabel))
-                .addContainerGap(153, Short.MAX_VALUE))
-        );
-        buttonGroupLayout.setVerticalGroup(
-            buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(buttonGroupLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(buttonGroupLayout.createSequentialGroup()
-                        .addComponent(amoutToLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(amountToField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40)
-                        .addComponent(chooseCodeTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(buttonGroupLayout.createSequentialGroup()
-                        .addComponent(amoutFromLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(amountFromField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(exchangeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(buyRadio)
-                            .addComponent(sellRadio)
-                            .addComponent(invoiceCheck)
-                            .addComponent(chooseCodeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(265, Short.MAX_VALUE))
-        );
+                    .addGap(40, 40, 40)
+                    .addComponent(chooseCodeTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(buttonGroupLayout.createSequentialGroup()
+                    .addComponent(amoutFromLabel)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(amountFromField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(exchangeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(buyRadio)
+                        .addComponent(sellRadio)
+                        .addComponent(invoiceCheck)
+                        .addComponent(chooseCodeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+            .addContainerGap(265, Short.MAX_VALUE))
+    );
 
-        tabbedPanel.addTab("Convertor", buttonGroup);
+    tabbedPanel.addTab("Convertor", buttonGroup);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(tabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 736, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+    getContentPane().setLayout(layout);
+    layout.setHorizontalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(layout.createSequentialGroup()
+            .addComponent(tabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 736, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(0, 0, Short.MAX_VALUE))
+    );
+    layout.setVerticalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(tabbedPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+    );
 
-        pack();
-        setLocationRelativeTo(null);
+    pack();
+    setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    static class DataRenderer extends DefaultTableCellRenderer {
+        
+        private NumberFormat formatter;
+        
+        public DataRenderer() { super(); }
+
+        @Override
+        public void setValue(Object value) {
+            if (formatter == null) {
+                formatter = NumberFormat.getNumberInstance();
+                formatter.setMaximumFractionDigits(5);
+                formatter.setMinimumFractionDigits(2);            
+            }
+            
+            setText((value == null) ? "0" : formatter.format(value));
+            setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        }
+    }
 
     private void clearContent(javax.swing.JTable table) {
         DefaultTableModel dtm = (DefaultTableModel) table.getModel();
@@ -344,18 +396,12 @@ public class Change extends javax.swing.JFrame {
         }
     }
     
-    
-    
     private void updateRateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateRateButtonActionPerformed
         this.clearContent(bnbRateTable);
         DataBase dataBase = new DataBase();
         dataBase.updateCurrency();
         dataBase.updateBNBTable(bnbRateTable);
     }//GEN-LAST:event_updateRateButtonActionPerformed
-
-    private void chooseCodeFromActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseCodeFromActionPerformed
-
-    }//GEN-LAST:event_chooseCodeFromActionPerformed
 
     private void exchangeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exchangeButtonActionPerformed
         int i = chooseCodeFrom.getSelectedIndex();
@@ -364,11 +410,13 @@ public class Change extends javax.swing.JFrame {
         if (buyRadio.isSelected()) {
             Converter converter = new Converter(localRateTable, i, j);
             amountToField.setValue(converter.convertValue(amountFromField.getValue()));
-            new DataBase().changeCurrencyInStock((String) amountFromField.getValue(), (String) chooseCodeFrom.getSelectedItem(),(String) amountToField.getValue() , (String) chooseCodeTo.getSelectedItem());
         } else {
             Converter converter = new Converter(localRateTable, j, i);
             amountToField.setValue(converter.convertValue(amountFromField.getValue()));
         }
+        
+        new DataBase().changeCurrencyInStock(((Number) amountFromField.getValue()).doubleValue(), String.valueOf(chooseCodeFrom.getSelectedItem()), 
+                ((Number) amountFromField.getValue()).doubleValue(), String.valueOf(chooseCodeTo.getSelectedItem()));
         
         if (invoiceCheck.isSelected()) {
             new InvoiceDialog(this, true).setVisible(true);
@@ -376,19 +424,11 @@ public class Change extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_exchangeButtonActionPerformed
 
-    private void amountFromFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_amountFromFieldActionPerformed
-
-    }//GEN-LAST:event_amountFromFieldActionPerformed
-
     private void chooseDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_chooseDatePropertyChange
         if (evt.getPropertyName().equals("date")) {
             logArea.setText(new DataBase().getLog(new java.sql.Date(chooseDate.getDate().getTime())));
         }
     }//GEN-LAST:event_chooseDatePropertyChange
-
-    private void stockTablePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_stockTablePropertyChange
-        // TODO add your handling code here:
-    }//GEN-LAST:event_stockTablePropertyChange
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {

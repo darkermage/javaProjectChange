@@ -14,7 +14,8 @@ public class Converter {
     }
     
     public double convertValue(Object inputField) {
-        double rate = Double.parseDouble((String) table.getModel().getValueAt(i, 2)) / Double.parseDouble((String) table.getModel().getValueAt(j, 2)) * Double.valueOf(inputField + "");
+        double rate = (double) table.getModel().getValueAt(i, 2) / (double) table.getModel().getValueAt(j, 2) * Double.valueOf(inputField + "");
+        
         return rate;
     }
 }

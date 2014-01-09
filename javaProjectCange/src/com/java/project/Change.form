@@ -110,15 +110,14 @@
                 <Component class="javax.swing.JTable" name="bnbRateTable">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="new javax.swing.table.DefaultTableModel(new Object[] { &quot;Rate Name&quot;, &quot;Rate&quot; }, 0)" type="code"/>
+                      <Connection code="new javax.swing.table.DefaultTableModel(new Object[] { &quot;Rate Name&quot;, &quot;Rate&quot; }, 0) {&#xd;&#xa;        public boolean isCellEditable (int row, int col) {&#xd;&#xa;            return false;&#xd;&#xa;        }&#xd;&#xa;}" type="code"/>
                     </Property>
-                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                     </Property>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="new DataBase().updateBNBTable(bnbRateTable);"/>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="new DataBase().updateBNBTable(bnbRateTable);&#xd;&#xa;&#xd;&#xa;javax.swing.table.TableColumn column = bnbRateTable.getColumnModel().getColumn(1);&#xd;&#xa;column.setCellRenderer(new DataRenderer());"/>
                   </AuxValues>
                 </Component>
               </SubComponents>
@@ -144,14 +143,14 @@
                 <Component class="javax.swing.JTable" name="localRateTable">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="new javax.swing.table.DefaultTableModel(new Object[] { &quot;&quot;, &quot;Rate Name&quot;, &quot;Buy&quot;, &quot;Sell&quot; }, 0)" type="code"/>
+                      <Connection code="new javax.swing.table.DefaultTableModel(new Object[] { &quot;&quot;, &quot;Rate Name&quot;, &quot;Buy&quot;, &quot;Sell&quot; }, 0) {&#xd;&#xa;            public boolean isCellEditable (int row, int col) {&#xd;&#xa;                if (col == 1) {&#xd;&#xa;                    return false;&#xd;&#xa;                }&#xd;&#xa;&#xd;&#xa;                return true;&#xd;&#xa;            }&#xd;&#xa;&#xd;&#xa;            Class[] types = new Class [] {&#xd;&#xa;                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class&#xd;&#xa;            };&#xd;&#xa;&#xd;&#xa;            public Class getColumnClass(int columnIndex) {&#xd;&#xa;                return types [columnIndex];&#xd;&#xa;            }&#xd;&#xa;        }" type="code"/>
                     </Property>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                     </Property>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="javax.swing.table.TableColumn tc = localRateTable.getColumnModel().getColumn(0);&#xa;localRateTable.removeColumn(tc);"/>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="javax.swing.table.TableColumn tc = localRateTable.getColumnModel().getColumn(0);&#xa;localRateTable.removeColumn(tc);&#xa;&#xa;column = localRateTable.getColumnModel().getColumn(1);&#xa;column.setCellRenderer(new DataRenderer());&#xa;&#xa;column = localRateTable.getColumnModel().getColumn(2);&#xa;column.setCellRenderer(new DataRenderer());"/>
                   </AuxValues>
                 </Component>
               </SubComponents>
@@ -255,17 +254,14 @@
                 <Component class="javax.swing.JTable" name="stockTable">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="new javax.swing.table.DefaultTableModel(new Object[] { &quot;&quot;, &quot;Code&quot;, &quot;Stock&quot; }, 0)" type="code"/>
+                      <Connection code="new javax.swing.table.DefaultTableModel(new Object[] { &quot;&quot;, &quot;Code&quot;, &quot;Stock&quot; }, 0) {            public boolean isCellEditable (int row, int col) {&#xd;&#xa;                if (col == 1) {&#xd;&#xa;                    return false;&#xd;&#xa;                }&#xd;&#xa;&#xd;&#xa;                return true;&#xd;&#xa;            }&#xd;&#xa;&#xd;&#xa;            Class[] types = new Class [] {&#xd;&#xa;                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class&#xd;&#xa;            };&#xd;&#xa;&#xd;&#xa;            public Class getColumnClass(int columnIndex) {&#xd;&#xa;                return types [columnIndex];&#xd;&#xa;            }&#xd;&#xa;        }" type="code"/>
                     </Property>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                       <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                     </Property>
                   </Properties>
-                  <Events>
-                    <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="stockTablePropertyChange"/>
-                  </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="tc = stockTable.getColumnModel().getColumn(0);&#xd;&#xa;stockTable.removeColumn(tc);&#xd;&#xa;&#xd;&#xa;new DataBase().updateStockTable(stockTable);"/>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="tc = stockTable.getColumnModel().getColumn(0);&#xd;&#xa;stockTable.removeColumn(tc);&#xd;&#xa;&#xd;&#xa;tc = stockTable.getColumnModel().getColumn(1);&#xd;&#xa;tc.setCellRenderer(new DataRenderer());&#xd;&#xa;&#xd;&#xa;new DataBase().updateStockTable(stockTable);"/>
                   </AuxValues>
                 </Component>
               </SubComponents>
@@ -413,9 +409,6 @@
                   <Dimension value="[120, 20]"/>
                 </Property>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chooseCodeFromActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="exchangeButton">
               <Properties>
@@ -447,10 +440,10 @@
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[120, 20]"/>
                 </Property>
+                <Property name="value" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new Double(0)" type="code"/>
+                </Property>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="amountFromFieldActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JFormattedTextField" name="amountToField">
               <Properties>
