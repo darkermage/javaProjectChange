@@ -374,7 +374,9 @@ public class Change extends javax.swing.JFrame {
 
     private void updateRateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateRateButtonActionPerformed
         this.clearContent(bnbRateTable);
-        new DataBase().updateBNBTable(bnbRateTable);
+        DataBase dataBase = new DataBase();
+        dataBase.updateCurrency();
+        dataBase.updateBNBTable(bnbRateTable);
     }//GEN-LAST:event_updateRateButtonActionPerformed
 
     private void saveLocalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveLocalButtonActionPerformed
