@@ -408,27 +408,29 @@ public class Change extends javax.swing.JFrame {
         int i = chooseCodeFrom.getSelectedIndex();
         int j = chooseCodeTo.getSelectedIndex();
         
-        double rate = 0.0D;
+        Converter converter = null;
         
         if (buyRadio.isSelected()) {
-            Converter converter = new Converter(localRateTable, i, j, 2);
-            amountToField.setValue(converter.convertValue(amountFromField.getValue()));
-            rate = converter.getRate();
+            converter = new Converter(localRateTable, i, j, 2);
         } else {
-            Converter converter = new Converter(localRateTable, j, i, 3);
-            amountToField.setValue(converter.convertValue(amountFromField.getValue()));
-            rate = converter.getRate();
+            converter = new Converter(localRateTable, j, i, 3);
         }
         
+        amountToField.setValue(converter.convertValue(amountFromField.getValue()));
+        double rate = converter.getRate();
+        
+        String codeFrom = String.valueOf(chooseCodeFrom.getSelectedItem());
+        String codeTo = String.valueOf(chooseCodeTo.getSelectedItem());
+        double amountFrom = ((Number) amountFromField.getValue()).doubleValue();
+        double amountTo = ((Number) amountToField.getValue()).doubleValue();
+        
         DataBase dataBase = new DataBase();
-        dataBase.changeCurrencyInStock(((Number) amountFromField.getValue()).doubleValue(), String.valueOf(chooseCodeFrom.getSelectedItem()), 
-                ((Number) amountFromField.getValue()).doubleValue(), String.valueOf(chooseCodeTo.getSelectedItem()));
-
-        dataBase.updateLog(new Date(new java.util.Date().getTime()), String.valueOf(chooseCodeFrom.getSelectedItem()), Double.parseDouble(String.valueOf(amountFromField.getValue())), rate, 
-                String.valueOf(chooseCodeTo.getSelectedItem()), Double.parseDouble(String.valueOf(amountToField.getValue())));
+        dataBase.changeCurrencyInStock(amountFrom, codeFrom,  amountTo, codeTo);
+        dataBase.updateLog(new Date(new java.util.Date().getTime()), codeFrom, amountFrom, rate, 
+                codeTo, amountTo);
         
         if (invoiceCheck.isSelected()) {
-            new InvoiceDialog(this, true).setVisible(true);
+            new InvoiceDialog(this, true, codeFrom, amountFrom, rate, codeTo, amountTo).setVisible(true);
             invoiceCheck.setSelected(false);
         }
     }//GEN-LAST:event_exchangeButtonActionPerformed

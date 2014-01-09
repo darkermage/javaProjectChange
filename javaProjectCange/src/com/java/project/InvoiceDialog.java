@@ -2,9 +2,18 @@ package com.java.project;
 
 public class InvoiceDialog extends javax.swing.JDialog {
 
-    public InvoiceDialog(java.awt.Frame parent, boolean modal) {
+    private static String codeFrom, codeTo;
+    private static double amountFrom, rate, amountTo;
+    
+    public InvoiceDialog(java.awt.Frame parent, boolean modal, String codeFrom, double amountFrom, double rate, String codeTo, double amountTo) {
         super(parent, modal);
         initComponents();
+        
+        InvoiceDialog.codeFrom = codeFrom;
+        InvoiceDialog.amountFrom = amountFrom;
+        InvoiceDialog.rate = rate;
+        InvoiceDialog.codeTo = codeTo;
+        InvoiceDialog.amountTo = amountTo;
     }
 
     @SuppressWarnings("unchecked")
@@ -88,6 +97,7 @@ public class InvoiceDialog extends javax.swing.JDialog {
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         Invoice invoice = new Invoice(nameField.getText(), cityField.getText(), egnField.getText());
+        invoice.setInvoice("C:\\invoice.txt", codeFrom, "buy", amountFrom, rate, codeTo, amountTo);
         this.dispose();
     }//GEN-LAST:event_saveButtonActionPerformed
 
@@ -96,7 +106,7 @@ public class InvoiceDialog extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                InvoiceDialog dialog = new InvoiceDialog(new javax.swing.JFrame(), true);
+                InvoiceDialog dialog = new InvoiceDialog(new javax.swing.JFrame(), true, codeFrom, amountFrom, rate, codeTo, amountTo);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

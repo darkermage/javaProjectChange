@@ -9,13 +9,13 @@ public class Invoice {
     private static int invoiceNumber = 1;
     private String city, name, egn;
     
-    public Invoice(String city, String name, String egn) {
+    public Invoice(String name, String city, String egn) {
         this.city = city;
         this.name = name;
         this.egn = egn;
     }
     
-    public void setInvoice(String filePath, String codeFrom, String bs, double amountFrom, double rate, String codeTo, double amountTo) {
+    public void setInvoice(String filePath, String codeFrom, String reason, double amountFrom, double rate, String codeTo, double amountTo) {
         PrintWriter writeInvoice = null;
         
         try {
@@ -32,10 +32,10 @@ public class Invoice {
             writeInvoice.println("EGN: " + egn);
             writeInvoice.println("City: " + city);
             writeInvoice.println();
-            writeInvoice.println("Customer'a amount: " + amountFrom + " " + codeFrom);
+            writeInvoice.println("Customer amount: " + amountFrom + " " + codeFrom);
             writeInvoice.println("Exchange rate: " + rate);
-            writeInvoice.println("Customer recive: " + amountTo + " " + codeTo);
-            writeInvoice.println("Reason: " + bs);
+            writeInvoice.println("Customer receive: " + amountTo + " " + codeTo);
+            writeInvoice.println("Reason: " + reason);
             writeInvoice.println();
             writeInvoice.println("Beneficiary: .................                                 Cashier: ................");
             writeInvoice.println();
