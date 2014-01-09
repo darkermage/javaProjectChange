@@ -407,13 +407,15 @@ public class Change extends javax.swing.JFrame {
     private void exchangeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exchangeButtonActionPerformed
         int i = chooseCodeFrom.getSelectedIndex();
         int j = chooseCodeTo.getSelectedIndex();
+        
         double rate = 0.0D;
+        
         if (buyRadio.isSelected()) {
-            Converter converter = new Converter(localRateTable, i, j);
+            Converter converter = new Converter(localRateTable, i, j, 2);
             amountToField.setValue(converter.convertValue(amountFromField.getValue()));
             rate = converter.getRate();
         } else {
-            Converter converter = new Converter(localRateTable, j, i);
+            Converter converter = new Converter(localRateTable, j, i, 3);
             amountToField.setValue(converter.convertValue(amountFromField.getValue()));
             rate = converter.getRate();
         }
