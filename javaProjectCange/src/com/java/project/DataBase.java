@@ -173,6 +173,33 @@ public class DataBase {
         }
     }
     
+        public void updateLocalTable(JTable table) {
+        DefaultTableModel dtm = (DefaultTableModel) table.getModel();
+        
+        try {
+            pst = conn.prepareStatement("SELECT * FROM local");
+            resultSet = pst.executeQuery();
+            
+            while (resultSet.next()) {
+                dtm.addRow(new Object[] { resultSet.getString("localId"),resultSet.getString("code"), resultSet.getString("buy"), resultSet.getString("sell") });
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+                
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+            }
+        }
+    }
+    
     public void updateCurrency() {
         try {
             pst = conn.prepareStatement("truncate table Rates");

@@ -1,5 +1,6 @@
 package com.java.project;
 
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class Change extends javax.swing.JFrame {
@@ -7,6 +8,7 @@ public class Change extends javax.swing.JFrame {
     public Change() {
         initComponents();
         new DataBase().updateCurrency();
+        new DataBase().updateLocalTable(localRateTable);
     }
 
     @SuppressWarnings("unchecked")
