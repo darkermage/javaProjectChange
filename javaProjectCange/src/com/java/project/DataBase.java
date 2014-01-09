@@ -173,7 +173,7 @@ public class DataBase {
         }
     }
     
-        public void updateLocalTable(JTable table) {
+    public void updateLocalTable(JTable table) {
         DefaultTableModel dtm = (DefaultTableModel) table.getModel();
         
         try {
@@ -342,6 +342,77 @@ public class DataBase {
                 } catch (SQLException e) {
                     System.err.println(e.getMessage());
                 }
+            }
+        }
+    }
+    
+    public void updateLocal(int localId, double buy, double sell) {
+        try{
+            pst = conn.prepareStatement("UPDATE local SET buy = ?, sell = ? WHERE localid = ?");
+            pst.setDouble(1, buy);
+            pst.setDouble(2, sell);
+            pst.setInt(2, localId);
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            if (pst != null) {
+                try {
+                    pst.close();
+                } catch (SQLException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+    }
+    
+   
+    public void changeCurrencyInStock(String amountFrom, String codeFrom, String amountTo, String codeTo) {
+        try {
+            pst = conn.prepareStatement("SELECT * FROM stock WHERE code = ?");
+            pst.setString(1, codeFrom);
+            resultSet = pst.executeQuery();
+            String name = resultSet.getString(2);
+            double amount = resultSet.getDouble(3);
+            pst.close();
+ 
+            amount += Double.parseDouble(amountFrom);
+ 
+            pst = conn.prepareStatement("UPDATE stock SET stock = ? WHERE code = ?");
+            pst.setDouble(1, amount);
+            pst.setString(2, name);
+            pst.executeUpdate();
+            pst.close();
+ 
+            pst = conn.prepareStatement("SELECT * FROM stock WHERE code = ?");
+            pst.setString(1, codeTo);
+            resultSet = pst.executeQuery();
+            name = resultSet.getString(2);
+            amount = resultSet.getDouble(3);
+            pst.close();
+ 
+            amount -= Double.parseDouble(amountTo);
+ 
+            pst = conn.prepareStatement("UPDATE stock SET stock = ? WHERE code = ?");
+            pst.setDouble(1, amount);
+            pst.setString(2, name);
+            pst.executeUpdate();
+ 
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
             }
         }
     }
