@@ -39,6 +39,18 @@ public class Change extends javax.swing.JFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         tabbedPanel = new javax.swing.JTabbedPane();
+        buttonGroup = new javax.swing.JPanel();
+        converterPanel = new javax.swing.JPanel();
+        amoutFromLabel = new javax.swing.JLabel();
+        amoutToLabel = new javax.swing.JLabel();
+        chooseCodeFrom = new javax.swing.JComboBox();
+        exchangeButton = new javax.swing.JButton();
+        chooseCodeTo = new javax.swing.JComboBox();
+        amountFromField = new javax.swing.JFormattedTextField();
+        amountToField = new javax.swing.JFormattedTextField();
+        buyRadio = new javax.swing.JRadioButton();
+        sellRadio = new javax.swing.JRadioButton();
+        invoiceCheck = new javax.swing.JCheckBox();
         tablesPanel = new javax.swing.JPanel();
         scrollPanelOne = new javax.swing.JScrollPane();
         bnbRateTable = new javax.swing.JTable();
@@ -57,18 +69,6 @@ public class Change extends javax.swing.JFrame {
         logArea = new javax.swing.JTextArea();
         stockLabel = new javax.swing.JLabel();
         chooseDate = new com.toedter.calendar.JDateChooser();
-        buttonGroup = new javax.swing.JPanel();
-        converterPanel = new javax.swing.JPanel();
-        amoutFromLabel = new javax.swing.JLabel();
-        amoutToLabel = new javax.swing.JLabel();
-        chooseCodeFrom = new javax.swing.JComboBox();
-        exchangeButton = new javax.swing.JButton();
-        chooseCodeTo = new javax.swing.JComboBox();
-        amountFromField = new javax.swing.JFormattedTextField();
-        amountToField = new javax.swing.JFormattedTextField();
-        buyRadio = new javax.swing.JRadioButton();
-        sellRadio = new javax.swing.JRadioButton();
-        invoiceCheck = new javax.swing.JCheckBox();
         menuBar = new javax.swing.JMenuBar();
         helpMenu = new javax.swing.JMenu();
         about = new javax.swing.JMenuItem();
@@ -76,6 +76,121 @@ public class Change extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Change");
         setResizable(false);
+
+        converterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Converter"));
+
+        amoutFromLabel.setText("Amount");
+
+        amoutToLabel.setText("Amount");
+
+        chooseCodeFrom.setModel(new javax.swing.DefaultComboBoxModel(new DataBase().getCodes()));
+        chooseCodeFrom.setPreferredSize(new java.awt.Dimension(120, 20));
+
+        exchangeButton.setText("Exchange");
+        exchangeButton.setPreferredSize(new java.awt.Dimension(145, 60));
+        exchangeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exchangeButtonActionPerformed(evt);
+            }
+        });
+
+        chooseCodeTo.setModel(new javax.swing.DefaultComboBoxModel(new DataBase().getCodes()));
+        chooseCodeTo.setPreferredSize(new java.awt.Dimension(120, 20));
+
+        amountFromField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
+        amountFromField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        amountFromField.setPreferredSize(new java.awt.Dimension(120, 20));
+        amountFromField.setValue(new Double(0));
+
+        amountToField.setEditable(false);
+        amountToField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
+        amountToField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        amountToField.setPreferredSize(new java.awt.Dimension(120, 20));
+
+        buttonGroup1.add(buyRadio);
+        buyRadio.setSelected(true);
+        buyRadio.setText("Buy");
+
+        buttonGroup1.add(sellRadio);
+        sellRadio.setText("Sell");
+
+        invoiceCheck.setText("Invoice");
+
+        javax.swing.GroupLayout converterPanelLayout = new javax.swing.GroupLayout(converterPanel);
+        converterPanel.setLayout(converterPanelLayout);
+        converterPanelLayout.setHorizontalGroup(
+            converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 451, Short.MAX_VALUE)
+            .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(converterPanelLayout.createSequentialGroup()
+                    .addGap(16, 16, 16)
+                    .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(amountFromField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(amoutFromLabel, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addComponent(chooseCodeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(20, 20, 20)
+                    .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(converterPanelLayout.createSequentialGroup()
+                            .addComponent(buyRadio)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(sellRadio)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(invoiceCheck))
+                        .addComponent(exchangeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(20, 20, 20)
+                    .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(amountToField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(chooseCodeTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(amoutToLabel))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        converterPanelLayout.setVerticalGroup(
+            converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 143, Short.MAX_VALUE)
+            .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(converterPanelLayout.createSequentialGroup()
+                    .addGap(17, 17, 17)
+                    .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(converterPanelLayout.createSequentialGroup()
+                            .addComponent(amoutToLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(amountToField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(40, 40, 40)
+                            .addComponent(chooseCodeTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(converterPanelLayout.createSequentialGroup()
+                            .addComponent(amoutFromLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(amountFromField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(exchangeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(buyRadio)
+                                .addComponent(sellRadio)
+                                .addComponent(invoiceCheck)
+                                .addComponent(chooseCodeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addContainerGap(18, Short.MAX_VALUE)))
+        );
+
+        javax.swing.GroupLayout buttonGroupLayout = new javax.swing.GroupLayout(buttonGroup);
+        buttonGroup.setLayout(buttonGroupLayout);
+        buttonGroupLayout.setHorizontalGroup(
+            buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(buttonGroupLayout.createSequentialGroup()
+                .addGap(134, 134, 134)
+                .addComponent(converterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(143, Short.MAX_VALUE))
+        );
+        buttonGroupLayout.setVerticalGroup(
+            buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(buttonGroupLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(converterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(200, Short.MAX_VALUE))
+        );
+
+        tabbedPanel.addTab("Converter", buttonGroup);
 
         scrollPanelOne.setPreferredSize(new java.awt.Dimension(300, 260));
 
@@ -211,7 +326,7 @@ public class Change extends javax.swing.JFrame {
     stockLabel.setText("Stock");
 
     chooseDate.setDate(new java.util.Date());
-    chooseDate.setDateFormatString("dd-MM-yyyy");
+    chooseDate.setDateFormatString("yyyy-MM-dd");
     chooseDate.setPreferredSize(new java.awt.Dimension(150, 20));
     chooseDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
         public void propertyChange(java.beans.PropertyChangeEvent evt) {
@@ -261,125 +376,10 @@ public class Change extends javax.swing.JFrame {
             .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(profitField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(profitLabel))
-            .addContainerGap(77, Short.MAX_VALUE))
+            .addContainerGap(47, Short.MAX_VALUE))
     );
 
     tabbedPanel.addTab("Cashier", cashierPanel);
-
-    converterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Converter"));
-
-    amoutFromLabel.setText("Amount");
-
-    amoutToLabel.setText("Amount");
-
-    chooseCodeFrom.setModel(new javax.swing.DefaultComboBoxModel(new DataBase().getCodes()));
-    chooseCodeFrom.setPreferredSize(new java.awt.Dimension(120, 20));
-
-    exchangeButton.setText("Exchange");
-    exchangeButton.setPreferredSize(new java.awt.Dimension(145, 60));
-    exchangeButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            exchangeButtonActionPerformed(evt);
-        }
-    });
-
-    chooseCodeTo.setModel(new javax.swing.DefaultComboBoxModel(new DataBase().getCodes()));
-    chooseCodeTo.setPreferredSize(new java.awt.Dimension(120, 20));
-
-    amountFromField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
-    amountFromField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-    amountFromField.setPreferredSize(new java.awt.Dimension(120, 20));
-    amountFromField.setValue(new Double(0));
-
-    amountToField.setEditable(false);
-    amountToField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
-    amountToField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-    amountToField.setPreferredSize(new java.awt.Dimension(120, 20));
-
-    buttonGroup1.add(buyRadio);
-    buyRadio.setSelected(true);
-    buyRadio.setText("Buy");
-
-    buttonGroup1.add(sellRadio);
-    sellRadio.setText("Sell");
-
-    invoiceCheck.setText("Invoice");
-
-    javax.swing.GroupLayout converterPanelLayout = new javax.swing.GroupLayout(converterPanel);
-    converterPanel.setLayout(converterPanelLayout);
-    converterPanelLayout.setHorizontalGroup(
-        converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 451, Short.MAX_VALUE)
-        .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(converterPanelLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(amountFromField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(amoutFromLabel, javax.swing.GroupLayout.Alignment.LEADING))
-                    .addComponent(chooseCodeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(converterPanelLayout.createSequentialGroup()
-                        .addComponent(buyRadio)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sellRadio)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(invoiceCheck))
-                    .addComponent(exchangeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(amountToField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(chooseCodeTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(amoutToLabel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-    );
-    converterPanelLayout.setVerticalGroup(
-        converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 143, Short.MAX_VALUE)
-        .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(converterPanelLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(converterPanelLayout.createSequentialGroup()
-                        .addComponent(amoutToLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(amountToField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40)
-                        .addComponent(chooseCodeTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(converterPanelLayout.createSequentialGroup()
-                        .addComponent(amoutFromLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(amountFromField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(exchangeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(buyRadio)
-                            .addComponent(sellRadio)
-                            .addComponent(invoiceCheck)
-                            .addComponent(chooseCodeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(18, Short.MAX_VALUE)))
-    );
-
-    javax.swing.GroupLayout buttonGroupLayout = new javax.swing.GroupLayout(buttonGroup);
-    buttonGroup.setLayout(buttonGroupLayout);
-    buttonGroupLayout.setHorizontalGroup(
-        buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(buttonGroupLayout.createSequentialGroup()
-            .addGap(134, 134, 134)
-            .addComponent(converterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(134, Short.MAX_VALUE))
-    );
-    buttonGroupLayout.setVerticalGroup(
-        buttonGroupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(buttonGroupLayout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(converterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(230, Short.MAX_VALUE))
-    );
-
-    tabbedPanel.addTab("Converter", buttonGroup);
 
     helpMenu.setText("Edit");
 
@@ -400,12 +400,15 @@ public class Change extends javax.swing.JFrame {
     layout.setHorizontalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
-            .addComponent(tabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 736, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(tabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(0, 0, Short.MAX_VALUE))
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(tabbedPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(tabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(0, 0, 0))
     );
 
     pack();
