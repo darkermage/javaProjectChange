@@ -1,6 +1,8 @@
 package com.java.project;
 
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 public class Change extends javax.swing.JFrame {
@@ -9,6 +11,23 @@ public class Change extends javax.swing.JFrame {
         initComponents();
         new DataBase().updateCurrency();
         new DataBase().updateLocalTable(localRateTable);
+        stockTable.getModel().addTableModelListener(new TableModelListener() {
+        
+            @Override
+        public void tableChanged(TableModelEvent e) {
+            int i = stockTable.getSelectedRow();
+            new DataBase().updateStock( Double.parseDouble( (String)stockTable.getModel().getValueAt(i, 2)), Integer.parseInt((String) stockTable.getModel().getValueAt(i, 0)));    
+        }
+        });
+        
+        localRateTable.getModel().addTableModelListener(new TableModelListener() {
+        
+            @Override
+        public void tableChanged(TableModelEvent e) {
+            int i = localRateTable.getSelectedRow();
+            new DataBase().updateLocal( Integer.parseInt((String) localRateTable.getModel().getValueAt(i, 0) ), Double.parseDouble( (String)localRateTable.getModel().getValueAt(i, 2) ), Double.parseDouble( (String)localRateTable.getModel().getValueAt(i, 3) ));   
+        }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -30,13 +49,11 @@ public class Change extends javax.swing.JFrame {
         cashierPanel = new javax.swing.JPanel();
         scrollPanelThree = new javax.swing.JScrollPane();
         stockTable = new javax.swing.JTable();
-        editStockButton = new javax.swing.JButton();
         profitField = new javax.swing.JFormattedTextField();
         profitLabel = new javax.swing.JLabel();
         dateLabel = new javax.swing.JLabel();
         scrollPanelFour = new javax.swing.JScrollPane();
         logArea = new javax.swing.JTextArea();
-        saveStockButton = new javax.swing.JButton();
         stockLabel = new javax.swing.JLabel();
         chooseDate = new com.toedter.calendar.JDateChooser();
         buttonGroup = new javax.swing.JPanel();
@@ -141,20 +158,17 @@ public class Change extends javax.swing.JFrame {
         scrollPanelThree.setPreferredSize(new java.awt.Dimension(300, 260));
 
         stockTable.setModel(new javax.swing.table.DefaultTableModel(new Object[] { "", "Code", "Stock" }, 0));
-        stockTable.setEnabled(false);
         stockTable.getTableHeader().setReorderingAllowed(false);
         tc = stockTable.getColumnModel().getColumn(0);
         stockTable.removeColumn(tc);
 
         new DataBase().updateStockTable(stockTable);
-        scrollPanelThree.setViewportView(stockTable);
-
-        editStockButton.setText("Edit");
-        editStockButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editStockButtonActionPerformed(evt);
+        stockTable.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                stockTablePropertyChange(evt);
             }
         });
+        scrollPanelThree.setViewportView(stockTable);
 
         profitField.setEditable(false);
         profitField.setText("0");
@@ -169,14 +183,6 @@ public class Change extends javax.swing.JFrame {
         logArea.setColumns(20);
         logArea.setRows(5);
         scrollPanelFour.setViewportView(logArea);
-
-        saveStockButton.setText("Save");
-        saveStockButton.setEnabled(false);
-        saveStockButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveStockButtonActionPerformed(evt);
-            }
-        });
 
         stockLabel.setText("Stock");
 
@@ -196,10 +202,6 @@ public class Change extends javax.swing.JFrame {
             .addGroup(cashierPanelLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(cashierPanelLayout.createSequentialGroup()
-                        .addComponent(editStockButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(saveStockButton))
                     .addComponent(scrollPanelThree, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(stockLabel))
                 .addGap(40, 40, 40)
@@ -232,14 +234,10 @@ public class Change extends javax.swing.JFrame {
                     .addComponent(scrollPanelThree, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(scrollPanelFour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(editStockButton)
-                        .addComponent(saveStockButton))
-                    .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(profitField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(profitLabel)))
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(profitField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profitLabel))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
         tabbedPanel.addTab("Cashier", cashierPanel);
@@ -370,6 +368,8 @@ public class Change extends javax.swing.JFrame {
         }
     }
     
+    
+    
     private void editLocalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editLocalButtonActionPerformed
         saveLocalButton.setEnabled(true);
         localRateTable.setEnabled(true);
@@ -386,20 +386,6 @@ public class Change extends javax.swing.JFrame {
         saveLocalButton.setEnabled(false);
         localRateTable.setEnabled(false);
     }//GEN-LAST:event_saveLocalButtonActionPerformed
-
-    private void editStockButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editStockButtonActionPerformed
-        saveStockButton.setEnabled(true);
-        stockTable.setEnabled(true);
-    }//GEN-LAST:event_editStockButtonActionPerformed
-
-    private void saveStockButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveStockButtonActionPerformed
-        saveStockButton.setEnabled(false);
-        stockTable.setEnabled(false);
-
-        for (int i = 0; i < stockTable.getRowCount(); i++) {
-            new DataBase().updateStock((double) stockTable.getModel().getValueAt(i, 1), (int) stockTable.getModel().getValueAt(i, 0));
-        }
-    }//GEN-LAST:event_saveStockButtonActionPerformed
 
     private void chooseCodeFromActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseCodeFromActionPerformed
 
@@ -433,6 +419,10 @@ public class Change extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_chooseDatePropertyChange
 
+    private void stockTablePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_stockTablePropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_stockTablePropertyChange
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
@@ -457,7 +447,6 @@ public class Change extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser chooseDate;
     private javax.swing.JLabel dateLabel;
     private javax.swing.JButton editLocalButton;
-    private javax.swing.JButton editStockButton;
     private javax.swing.JButton exchangeButton;
     private javax.swing.JCheckBox invoiceCheck;
     private javax.swing.JTable localRateTable;
@@ -466,7 +455,6 @@ public class Change extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField profitField;
     private javax.swing.JLabel profitLabel;
     private javax.swing.JButton saveLocalButton;
-    private javax.swing.JButton saveStockButton;
     private javax.swing.JScrollPane scrollPanelFour;
     private javax.swing.JScrollPane scrollPanelOne;
     private javax.swing.JScrollPane scrollPanelThree;
