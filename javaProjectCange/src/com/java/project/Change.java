@@ -47,6 +47,7 @@ public class Change extends javax.swing.JFrame {
         invoiceCheck = new javax.swing.JCheckBox();
         amoutFromLabel = new javax.swing.JLabel();
         amoutToLabel = new javax.swing.JLabel();
+        outputField = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Change");
@@ -236,7 +237,7 @@ public class Change extends javax.swing.JFrame {
                     .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(profitField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(profitLabel)))
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         tabbedPanel.addTab("Cashier", cashierPanel);
@@ -250,6 +251,7 @@ public class Change extends javax.swing.JFrame {
         });
 
         exchangeButton.setText("Exchange");
+        exchangeButton.setPreferredSize(new java.awt.Dimension(145, 60));
         exchangeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exchangeButtonActionPerformed(evt);
@@ -285,6 +287,11 @@ public class Change extends javax.swing.JFrame {
 
         amoutToLabel.setText("Amount");
 
+        outputField.setEditable(false);
+        outputField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,###"))));
+        outputField.setPreferredSize(new java.awt.Dimension(145, 20));
+        outputField.setValue(0);
+
         javax.swing.GroupLayout convertorPanelLayout = new javax.swing.GroupLayout(convertorPanel);
         convertorPanel.setLayout(convertorPanelLayout);
         convertorPanelLayout.setHorizontalGroup(
@@ -296,22 +303,23 @@ public class Change extends javax.swing.JFrame {
                         .addComponent(amountFromField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(amoutFromLabel, javax.swing.GroupLayout.Alignment.LEADING))
                     .addComponent(chooseCodeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(convertorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(convertorPanelLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(buyRadio)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sellRadio)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(invoiceCheck))
-                    .addGroup(convertorPanelLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(exchangeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(20, 20, 20)
                 .addGroup(convertorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(amountToField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(chooseCodeTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(amoutToLabel))
+                    .addComponent(outputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(convertorPanelLayout.createSequentialGroup()
+                        .addGroup(convertorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(convertorPanelLayout.createSequentialGroup()
+                                .addComponent(buyRadio)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(sellRadio)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(invoiceCheck))
+                            .addComponent(exchangeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(convertorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(amountToField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(chooseCodeTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(amoutToLabel))))
                 .addContainerGap(153, Short.MAX_VALUE))
         );
         convertorPanelLayout.setVerticalGroup(
@@ -330,14 +338,16 @@ public class Change extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(convertorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(amountFromField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(exchangeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(exchangeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(convertorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(buyRadio)
                             .addComponent(sellRadio)
                             .addComponent(invoiceCheck)
                             .addComponent(chooseCodeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(260, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(outputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(236, Short.MAX_VALUE))
         );
 
         tabbedPanel.addTab("Convertor", convertorPanel);
@@ -403,10 +413,15 @@ public class Change extends javax.swing.JFrame {
     }//GEN-LAST:event_chooseCodeFromActionPerformed
 
     private void exchangeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exchangeButtonActionPerformed
+        int i = chooseCodeFrom.getSelectedIndex();
+        int j = chooseCodeTo.getSelectedIndex();
+        
         if (buyRadio.isSelected()) {
-            
+            Converter converter = new Converter(localRateTable, i, j);
+            outputField.setValue(converter.convertValue(amountFromField.getValue()));
         } else {
-            
+            Converter converter = new Converter(localRateTable, j, i);
+            outputField.setValue(converter.convertValue(amountFromField.getValue()));
         }
         
         if (invoiceCheck.isSelected()) {
@@ -454,6 +469,7 @@ public class Change extends javax.swing.JFrame {
     private javax.swing.JTable localRateTable;
     private javax.swing.JLabel localRatesLabel;
     private javax.swing.JTextArea logArea;
+    private javax.swing.JFormattedTextField outputField;
     private javax.swing.JFormattedTextField profitField;
     private javax.swing.JLabel profitLabel;
     private javax.swing.JButton saveLocalButton;
