@@ -127,7 +127,7 @@ public class DataBase {
             resultSet = pst.executeQuery();
             
             while (resultSet.next()) {
-                dtm.addRow(new Object[] { resultSet.getString(1), resultSet.getString(2), resultSet.getString(3) });
+                dtm.addRow(new Object[] { new Integer(resultSet.getString(1)), resultSet.getString(2), new Double(resultSet.getString(3)) });
             }
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
@@ -154,7 +154,7 @@ public class DataBase {
             resultSet = pst.executeQuery();
             
             while (resultSet.next()) {
-                dtm.addRow(new Object[] { resultSet.getString("RateName"), resultSet.getString("Rate") });
+                dtm.addRow(new Object[] { resultSet.getString("RateName"), new Double(resultSet.getString("Rate")) });
             }
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
@@ -181,7 +181,7 @@ public class DataBase {
             resultSet = pst.executeQuery();
             
             while (resultSet.next()) {
-                dtm.addRow(new Object[] { resultSet.getString("localId"),resultSet.getString("code"), resultSet.getString("buy"), resultSet.getString("sell") });
+                dtm.addRow(new Object[] { new Integer(resultSet.getString("localId")), resultSet.getString("code"), new Double(resultSet.getString("buy")), new Double(resultSet.getString("sell")) });
             }
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
@@ -378,37 +378,50 @@ public class DataBase {
         }
     }
     
-    public void changeCurrencyInStock(String amountFrom, String codeFrom, String amountTo, String codeTo) {
+    public void changeCurrencyInStock(double amountFrom, String codeFrom, double amountTo, String codeTo) {
         try {
             pst = conn.prepareStatement("SELECT * FROM stock WHERE code = ?");
             pst.setString(1, codeFrom);
             resultSet = pst.executeQuery();
-            String name = resultSet.getString(2);
-            double amount = resultSet.getDouble(3);
+            
+            String name = null;
+            double amount = 0.0D;
+            
+            if (resultSet.next()) {
+                name = resultSet.getString(2);
+                amount = resultSet.getDouble(3);
+                amount += amountFrom;
+            }
+            
             pst.close();
- 
-            amount += Double.parseDouble(amountFrom);
+            resultSet.close();
  
             pst = conn.prepareStatement("UPDATE stock SET stock = ? WHERE code = ?");
+            
             pst.setDouble(1, amount);
             pst.setString(2, name);
             pst.executeUpdate();
+            
             pst.close();
  
             pst = conn.prepareStatement("SELECT * FROM stock WHERE code = ?");
             pst.setString(1, codeTo);
             resultSet = pst.executeQuery();
-            name = resultSet.getString(2);
-            amount = resultSet.getDouble(3);
+            
+            if (resultSet.next()) {
+                name = resultSet.getString(2);
+                amount = resultSet.getDouble(3);
+            }
+            
             pst.close();
+            resultSet.close();
  
-            amount -= Double.parseDouble(amountTo);
+            amount -= amountTo;
  
             pst = conn.prepareStatement("UPDATE stock SET stock = ? WHERE code = ?");
             pst.setDouble(1, amount);
             pst.setString(2, name);
             pst.executeUpdate();
- 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         } finally {
@@ -419,49 +432,9 @@ public class DataBase {
                 if (pst != null) {
                     pst.close();
                 }
-                if (conn != null) {
-                    conn.close();
-                }
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
             }
         }
     }
-    
-    
-    
-//    public Object[][] getStock(){
-//        Object[][] ret;
-//        try {
-//            pst = conn.prepareStatement("SELECT * FROM stock");
-//            ResultSet res = pst.executeQuery();
-//            res.last();
-//            
-//            int i = res.getRow();
-//        
-//            ret = new Object[i - 1][2];
-//            res.beforeFirst();
-//            int j = 0;
-//            while (res.next()) {
-//                 String code = res.getString(2);
-//                 double amount = res.getDouble(3);
-//                 ret[j][0]=code;
-//                 ret[j][1]=amount;
-//                 j++;
-//            }
-//            return ret;
-//        } catch (SQLException e) {
-//            System.err.println(e.getMessage());
-//        } finally {
-//            if (pst != null) {
-//                try {
-//                    pst.close();
-//                } catch (SQLException e) {
-//                    System.err.println(e.getMessage());
-//                }
-//            }
-//        }
-//        return null;
-//        
-//    }
 }
