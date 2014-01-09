@@ -351,7 +351,7 @@ public class DataBase {
             pst = conn.prepareStatement("UPDATE local SET buy = ?, sell = ? WHERE localid = ?");
             pst.setDouble(1, buy);
             pst.setDouble(2, sell);
-            pst.setInt(2, localId);
+            pst.setInt(3, localId);
             pst.executeUpdate();
         } catch (SQLException e) {
             System.err.println(e.getMessage());

@@ -43,9 +43,7 @@ public class Change extends javax.swing.JFrame {
         scrollPanelTwo = new javax.swing.JScrollPane();
         localRateTable = new javax.swing.JTable();
         localRatesLabel = new javax.swing.JLabel();
-        editLocalButton = new javax.swing.JButton();
         updateRateButton = new javax.swing.JButton();
-        saveLocalButton = new javax.swing.JButton();
         cashierPanel = new javax.swing.JPanel();
         scrollPanelThree = new javax.swing.JScrollPane();
         stockTable = new javax.swing.JTable();
@@ -92,25 +90,10 @@ public class Change extends javax.swing.JFrame {
         localRatesLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         localRatesLabel.setText("Local Rates");
 
-        editLocalButton.setText("Edit");
-        editLocalButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editLocalButtonActionPerformed(evt);
-            }
-        });
-
         updateRateButton.setText("Update");
         updateRateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 updateRateButtonActionPerformed(evt);
-            }
-        });
-
-        saveLocalButton.setText("Save");
-        saveLocalButton.setEnabled(false);
-        saveLocalButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveLocalButtonActionPerformed(evt);
             }
         });
 
@@ -126,10 +109,6 @@ public class Change extends javax.swing.JFrame {
                     .addComponent(scrollPanelOne, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(90, 90, 90)
                 .addGroup(tablesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(tablesPanelLayout.createSequentialGroup()
-                        .addComponent(editLocalButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(saveLocalButton))
                     .addComponent(scrollPanelTwo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(localRatesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20))
@@ -146,10 +125,7 @@ public class Change extends javax.swing.JFrame {
                     .addComponent(scrollPanelTwo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(scrollPanelOne, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
-                .addGroup(tablesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(editLocalButton)
-                    .addComponent(updateRateButton)
-                    .addComponent(saveLocalButton))
+                .addComponent(updateRateButton)
                 .addGap(20, 20, 20))
         );
 
@@ -370,22 +346,12 @@ public class Change extends javax.swing.JFrame {
     
     
     
-    private void editLocalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editLocalButtonActionPerformed
-        saveLocalButton.setEnabled(true);
-        localRateTable.setEnabled(true);
-    }//GEN-LAST:event_editLocalButtonActionPerformed
-
     private void updateRateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateRateButtonActionPerformed
         this.clearContent(bnbRateTable);
         DataBase dataBase = new DataBase();
         dataBase.updateCurrency();
         dataBase.updateBNBTable(bnbRateTable);
     }//GEN-LAST:event_updateRateButtonActionPerformed
-
-    private void saveLocalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveLocalButtonActionPerformed
-        saveLocalButton.setEnabled(false);
-        localRateTable.setEnabled(false);
-    }//GEN-LAST:event_saveLocalButtonActionPerformed
 
     private void chooseCodeFromActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseCodeFromActionPerformed
 
@@ -446,7 +412,6 @@ public class Change extends javax.swing.JFrame {
     private javax.swing.JComboBox chooseCodeTo;
     private com.toedter.calendar.JDateChooser chooseDate;
     private javax.swing.JLabel dateLabel;
-    private javax.swing.JButton editLocalButton;
     private javax.swing.JButton exchangeButton;
     private javax.swing.JCheckBox invoiceCheck;
     private javax.swing.JTable localRateTable;
@@ -454,7 +419,6 @@ public class Change extends javax.swing.JFrame {
     private javax.swing.JTextArea logArea;
     private javax.swing.JFormattedTextField profitField;
     private javax.swing.JLabel profitLabel;
-    private javax.swing.JButton saveLocalButton;
     private javax.swing.JScrollPane scrollPanelFour;
     private javax.swing.JScrollPane scrollPanelOne;
     private javax.swing.JScrollPane scrollPanelThree;
