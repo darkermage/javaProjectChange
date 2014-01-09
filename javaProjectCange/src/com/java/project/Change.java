@@ -1,5 +1,6 @@
 package com.java.project;
 
+import java.sql.Date;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -360,16 +361,18 @@ public class Change extends javax.swing.JFrame {
     private void exchangeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exchangeButtonActionPerformed
         int i = chooseCodeFrom.getSelectedIndex();
         int j = chooseCodeTo.getSelectedIndex();
-        
+        double rate = 0.0D;
         if (buyRadio.isSelected()) {
             Converter converter = new Converter(localRateTable, i, j);
             amountToField.setValue(converter.convertValue(amountFromField.getValue()));
-            new DataBase().changeCurrencyInStock(String.valueOf(amountFromField.getValue()), (String) chooseCodeFrom.getSelectedItem(),String.valueOf(amountToField.getValue()) , (String) chooseCodeTo.getSelectedItem());
+            rate = converter.getRate();
         } else {
             Converter converter = new Converter(localRateTable, j, i);
             amountToField.setValue(converter.convertValue(amountFromField.getValue()));
+            rate = converter.getRate();
         }
-        
+        new DataBase().changeCurrencyInStock(String.valueOf(amountFromField.getValue()), (String) chooseCodeFrom.getSelectedItem(),String.valueOf(amountToField.getValue()) , (String) chooseCodeTo.getSelectedItem());
+        new DataBase().updateLog(new Date(new java.util.Date().getTime()), (String) chooseCodeFrom.getSelectedItem(), Double.parseDouble(String.valueOf(amountFromField.getValue())), rate, (String) chooseCodeTo.getSelectedItem(), Double.parseDouble(String.valueOf(amountToField.getValue())));
         if (invoiceCheck.isSelected()) {
             new InvoiceDialog(this, true).setVisible(true);
             invoiceCheck.setSelected(false);

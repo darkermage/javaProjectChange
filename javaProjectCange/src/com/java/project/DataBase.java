@@ -439,40 +439,4 @@ public class DataBase {
         }
     }
     
-    
-    
-//    public Object[][] getStock(){
-//        Object[][] ret;
-//        try {
-//            pst = conn.prepareStatement("SELECT * FROM stock");
-//            ResultSet res = pst.executeQuery();
-//            res.last();
-//            
-//            int i = res.getRow();
-//        
-//            ret = new Object[i - 1][2];
-//            res.beforeFirst();
-//            int j = 0;
-//            while (res.next()) {
-//                 String code = res.getString(2);
-//                 double amount = res.getDouble(3);
-//                 ret[j][0]=code;
-//                 ret[j][1]=amount;
-//                 j++;
-//            }
-//            return ret;
-//        } catch (SQLException e) {
-//            System.err.println(e.getMessage());
-//        } finally {
-//            if (pst != null) {
-//                try {
-//                    pst.close();
-//                } catch (SQLException e) {
-//                    System.err.println(e.getMessage());
-//                }
-//            }
-//        }
-//        return null;
-//        
-//    }
 }
