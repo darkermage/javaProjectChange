@@ -440,7 +440,9 @@ public class DataBase {
     
     public void updateProfit(Date date, double amount){
         try {
-            pst = conn.prepareStatement("UPDATE profit SET profit = profit + ? WHERE date = ?");
+            pst = conn.prepareStatement("REPLACE INTO profit( `date`, `profit` ) VALUES( ?, ? )");
+            pst.setDouble(2, amount);
+            pst.setDate(1, date);
             pst.executeUpdate();
         } catch (SQLException e) {
             System.err.println(e.getMessage());

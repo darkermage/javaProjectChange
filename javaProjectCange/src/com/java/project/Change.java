@@ -461,13 +461,13 @@ public class Change extends javax.swing.JFrame {
         
         
         if (buyRadio.isSelected()) {
-            converter = new Converter(localRateTable, i, j, 2);
+            converter = new Converter(localRateTable, bnbRateTable, i, j, 2);
             afterConvert = converter.convertValue(amountFromField.getValue());
             checked = afterConvert < (double) stockTable.getValueAt(j, 1);
             codeFrom = String.valueOf(chooseCodeFrom.getSelectedItem());
             codeTo = String.valueOf(chooseCodeTo.getSelectedItem());
         } else {
-            converter = new Converter(localRateTable, j, i, 3);
+            converter = new Converter(localRateTable,  bnbRateTable, j, i, 3);
             afterConvert = converter.convertValue(amountFromField.getValue());
             checked = Double.parseDouble(amountFromField.getText()) < (double) stockTable.getValueAt(i, 1);
             codeFrom = String.valueOf(chooseCodeTo.getSelectedItem());
@@ -484,7 +484,8 @@ public class Change extends javax.swing.JFrame {
             dataBase.changeCurrencyInStock(amountFrom, codeFrom,  amountTo, codeTo);
             dataBase.updateLog(new Date(new java.util.Date().getTime()), codeFrom, amountFrom, rate, 
                     codeTo, amountTo);
-
+            dataBase.updateProfit(new Date(new java.util.Date().getTime()),converter.getProfit());
+            
             if (invoiceCheck.isSelected()) {
                 new InvoiceDialog(this, true, codeFrom, amountFrom, rate, codeTo, amountTo).setVisible(true);
                 invoiceCheck.setSelected(false);
