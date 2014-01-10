@@ -481,6 +481,7 @@ public class Change extends javax.swing.JFrame {
     private void chooseDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_chooseDatePropertyChange
         if (evt.getPropertyName().equals("date")) {
             logArea.setText(new DataBase().getLog(new java.sql.Date(chooseDate.getDate().getTime())));
+            profitField.setValue(new DataBase().getProfit(new java.sql.Date(chooseDate.getDate().getTime())));
         }
     }//GEN-LAST:event_chooseDatePropertyChange
 

@@ -438,9 +438,9 @@ public class DataBase {
         }
     }
     
-    public void updateProfit(double amount){
+    public void updateProfit(Date date, double amount){
         try {
-            pst = conn.prepareStatement("INSERT INTO log(`date`, `currency_from`, `currency_from_amount`, `rate`, `currency_to`, `currency_to_amount`) VALUES(?,?,?,?,?,?)");
+            pst = conn.prepareStatement("UPDATE profit SET profit = profit + ? WHERE date = ?");
             pst.executeUpdate();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -453,5 +453,34 @@ public class DataBase {
                 }
             }
         }
+    }
+    
+    public double getProfit(Date date) {
+        double profit = -1.0D;
+        try {
+            pst = conn.prepareStatement("SELECT profit FROM profit WHERE date = ?");
+            pst.setDate(1, date);
+            
+            resultSet = pst.executeQuery();
+            
+            if (resultSet.next()) {
+                profit = resultSet.getDouble("profit");
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            try {
+                if (pst != null) {
+                        pst.close();
+                }
+
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+        return profit;
     }
 }
