@@ -20,7 +20,9 @@ public class Change extends javax.swing.JFrame {
             @Override
             public void tableChanged(TableModelEvent e) {
                 int i = stockTable.getSelectedRow();
-                new DataBase().updateStock((double) stockTable.getModel().getValueAt(i, 2), (int) stockTable.getModel().getValueAt(i, 0));    
+                if (i < stockTable.getRowCount() && i != -1) {
+                    new DataBase().updateStock((double) stockTable.getModel().getValueAt(i, 2), (int) stockTable.getModel().getValueAt(i, 0));             
+                }
             }
         });
         
@@ -381,9 +383,9 @@ public class Change extends javax.swing.JFrame {
 
     tabbedPanel.addTab("Cashier", cashierPanel);
 
-    helpMenu.setText("Edit");
+    helpMenu.setText("Help");
 
-    about.setText("Help");
+    about.setText("About");
     about.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             aboutActionPerformed(evt);
@@ -452,29 +454,46 @@ public class Change extends javax.swing.JFrame {
         int j = chooseCodeTo.getSelectedIndex();
         
         Converter converter = null;
+        double afterConvert = 0.0d;
+        boolean checked = false;
+        String codeFrom = null;
+        String codeTo = null;
+        
         
         if (buyRadio.isSelected()) {
             converter = new Converter(localRateTable, i, j, 2);
+            afterConvert = converter.convertValue(amountFromField.getValue());
+            checked = afterConvert < (double) stockTable.getValueAt(j, 1);
+            codeFrom = String.valueOf(chooseCodeFrom.getSelectedItem());
+            codeTo = String.valueOf(chooseCodeTo.getSelectedItem());
         } else {
             converter = new Converter(localRateTable, j, i, 3);
+            afterConvert = converter.convertValue(amountFromField.getValue());
+            checked = Double.parseDouble(amountFromField.getText()) < (double) stockTable.getValueAt(i, 1);
+            codeFrom = String.valueOf(chooseCodeTo.getSelectedItem());
+            codeTo = String.valueOf(chooseCodeFrom.getSelectedItem());
         }
         
-        amountToField.setValue(converter.convertValue(amountFromField.getValue()));
-        double rate = converter.getRate();
-        
-        String codeFrom = String.valueOf(chooseCodeFrom.getSelectedItem());
-        String codeTo = String.valueOf(chooseCodeTo.getSelectedItem());
-        double amountFrom = ((Number) amountFromField.getValue()).doubleValue();
-        double amountTo = ((Number) amountToField.getValue()).doubleValue();
-        
-        DataBase dataBase = new DataBase();
-        dataBase.changeCurrencyInStock(amountFrom, codeFrom,  amountTo, codeTo);
-        dataBase.updateLog(new Date(new java.util.Date().getTime()), codeFrom, amountFrom, rate, 
-                codeTo, amountTo);
-        
-        if (invoiceCheck.isSelected()) {
-            new InvoiceDialog(this, true, codeFrom, amountFrom, rate, codeTo, amountTo).setVisible(true);
-            invoiceCheck.setSelected(false);
+        if (checked) {
+            amountToField.setValue(afterConvert);
+            double rate = converter.getRate();
+            double amountFrom = ((Number) amountFromField.getValue()).doubleValue();
+            double amountTo = ((Number) amountToField.getValue()).doubleValue();
+
+            DataBase dataBase = new DataBase();
+            dataBase.changeCurrencyInStock(amountFrom, codeFrom,  amountTo, codeTo);
+            dataBase.updateLog(new Date(new java.util.Date().getTime()), codeFrom, amountFrom, rate, 
+                    codeTo, amountTo);
+
+            if (invoiceCheck.isSelected()) {
+                new InvoiceDialog(this, true, codeFrom, amountFrom, rate, codeTo, amountTo).setVisible(true);
+                invoiceCheck.setSelected(false);
+            }
+            
+            this.clearContent(stockTable);
+            dataBase.updateStockTable(stockTable);
+        } else {
+            JOptionPane.showMessageDialog(null, "Not enough in stock");
         }
     }//GEN-LAST:event_exchangeButtonActionPerformed
 
