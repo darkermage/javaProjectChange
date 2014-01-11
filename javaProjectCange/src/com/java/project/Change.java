@@ -285,135 +285,136 @@ public class Change extends javax.swing.JFrame {
 
         scrollPanelThree.setPreferredSize(new java.awt.Dimension(300, 260));
 
-        stockTable.setModel(new javax.swing.table.DefaultTableModel(new Object[] { "", "Code", "Stock" }, 0) {            public boolean isCellEditable (int row, int col) {
-            if (col == 1) {
-                return false;
+        stockTable.setModel(new javax.swing.table.DefaultTableModel(new Object[] { "", "Code", "Stock" }, 0) {            
+            public boolean isCellEditable (int row, int col) {
+                if (col == 1) {
+                    return false;
+                }
+
+                return true;
             }
 
-            return true;
-        }
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class
+            };
 
-        Class[] types = new Class [] {
-            java.lang.Integer.class, java.lang.String.class, java.lang.Double.class
-        };
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        stockTable.getTableHeader().setReorderingAllowed(false);
+        tc = stockTable.getColumnModel().getColumn(0);
+        stockTable.removeColumn(tc);
 
-        public Class getColumnClass(int columnIndex) {
-            return types [columnIndex];
-        }
-    });
-    stockTable.getTableHeader().setReorderingAllowed(false);
-    tc = stockTable.getColumnModel().getColumn(0);
-    stockTable.removeColumn(tc);
+        tc = stockTable.getColumnModel().getColumn(1);
+        tc.setCellRenderer(new DataRenderer());
 
-    tc = stockTable.getColumnModel().getColumn(1);
-    tc.setCellRenderer(new DataRenderer());
+        new DataBase().updateStockTable(stockTable);
+        scrollPanelThree.setViewportView(stockTable);
 
-    new DataBase().updateStockTable(stockTable);
-    scrollPanelThree.setViewportView(stockTable);
+        profitField.setEditable(false);
+        profitField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        profitField.setText("0");
 
-    profitField.setEditable(false);
-    profitField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-    profitField.setText("0");
+        profitLabel.setText("Profit");
 
-    profitLabel.setText("Profit");
+        dateLabel.setText("Date");
 
-    dateLabel.setText("Date");
+        scrollPanelFour.setPreferredSize(new java.awt.Dimension(350, 260));
 
-    scrollPanelFour.setPreferredSize(new java.awt.Dimension(350, 260));
+        logArea.setEditable(false);
+        logArea.setColumns(20);
+        logArea.setRows(5);
+        scrollPanelFour.setViewportView(logArea);
 
-    logArea.setEditable(false);
-    logArea.setColumns(20);
-    logArea.setRows(5);
-    scrollPanelFour.setViewportView(logArea);
+        stockLabel.setText("Stock");
 
-    stockLabel.setText("Stock");
+        chooseDate.setDate(new java.util.Date());
+        chooseDate.setDateFormatString("yyyy-MM-dd");
+        chooseDate.setPreferredSize(new java.awt.Dimension(150, 20));
+        chooseDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                chooseDatePropertyChange(evt);
+            }
+        });
 
-    chooseDate.setDate(new java.util.Date());
-    chooseDate.setDateFormatString("yyyy-MM-dd");
-    chooseDate.setPreferredSize(new java.awt.Dimension(150, 20));
-    chooseDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-        public void propertyChange(java.beans.PropertyChangeEvent evt) {
-            chooseDatePropertyChange(evt);
-        }
-    });
+        javax.swing.GroupLayout cashierPanelLayout = new javax.swing.GroupLayout(cashierPanel);
+        cashierPanel.setLayout(cashierPanelLayout);
+        cashierPanelLayout.setHorizontalGroup(
+            cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cashierPanelLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(scrollPanelThree, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(stockLabel))
+                .addGap(40, 40, 40)
+                .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(cashierPanelLayout.createSequentialGroup()
+                        .addComponent(dateLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chooseDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(cashierPanelLayout.createSequentialGroup()
+                        .addComponent(profitLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(profitField, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(scrollPanelFour, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25))
+        );
+        cashierPanelLayout.setVerticalGroup(
+            cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cashierPanelLayout.createSequentialGroup()
+                .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, cashierPanelLayout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(stockLabel)
+                        .addGap(10, 10, 10))
+                    .addGroup(cashierPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(chooseDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dateLabel))))
+                .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(scrollPanelThree, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scrollPanelFour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(profitField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profitLabel))
+                .addContainerGap(47, Short.MAX_VALUE))
+        );
 
-    javax.swing.GroupLayout cashierPanelLayout = new javax.swing.GroupLayout(cashierPanel);
-    cashierPanel.setLayout(cashierPanelLayout);
-    cashierPanelLayout.setHorizontalGroup(
-        cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(cashierPanelLayout.createSequentialGroup()
-            .addGap(25, 25, 25)
-            .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(scrollPanelThree, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(stockLabel))
-            .addGap(40, 40, 40)
-            .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(cashierPanelLayout.createSequentialGroup()
-                    .addComponent(dateLabel)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(chooseDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(cashierPanelLayout.createSequentialGroup()
-                    .addComponent(profitLabel)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(profitField, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addComponent(scrollPanelFour, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGap(25, 25, 25))
-    );
-    cashierPanelLayout.setVerticalGroup(
-        cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(cashierPanelLayout.createSequentialGroup()
-            .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, cashierPanelLayout.createSequentialGroup()
-                    .addGap(15, 15, 15)
-                    .addComponent(stockLabel)
-                    .addGap(10, 10, 10))
-                .addGroup(cashierPanelLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(chooseDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(dateLabel))))
-            .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(scrollPanelThree, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(scrollPanelFour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addGroup(cashierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(profitField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(profitLabel))
-            .addContainerGap(47, Short.MAX_VALUE))
-    );
+        tabbedPanel.addTab("Cashier", cashierPanel);
 
-    tabbedPanel.addTab("Cashier", cashierPanel);
+        helpMenu.setText("Help");
 
-    helpMenu.setText("Help");
+        about.setText("About");
+        about.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutActionPerformed(evt);
+            }
+        });
+        helpMenu.add(about);
 
-    about.setText("About");
-    about.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            aboutActionPerformed(evt);
-        }
-    });
-    helpMenu.add(about);
+        menuBar.add(helpMenu);
 
-    menuBar.add(helpMenu);
+        setJMenuBar(menuBar);
 
-    setJMenuBar(menuBar);
-
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-    getContentPane().setLayout(layout);
-    layout.setHorizontalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(tabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-    );
-    layout.setVerticalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(tabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(0, 0, 0))
-    );
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(tabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
+        );
 
-    pack();
-    setLocationRelativeTo(null);
+        pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     static class DataRenderer extends DefaultTableCellRenderer {
