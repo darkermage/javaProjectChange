@@ -455,6 +455,7 @@ public class Change extends javax.swing.JFrame {
         int i = chooseCodeFrom.getSelectedIndex();
         int j = chooseCodeTo.getSelectedIndex();
         
+        String value = amountFromField.getText().replace(',', '.');
         Converter converter = null;
         double afterConvert = 0.0d;
         boolean checked = false;
@@ -463,14 +464,14 @@ public class Change extends javax.swing.JFrame {
         
         if (buyRadio.isSelected()) {
             converter = new Converter(localRateTable, bnbRateTable, i, j, 3);
-            afterConvert = converter.convertValue(amountFromField.getValue());
+            afterConvert = converter.convertValue(value);
             checked = afterConvert < (double) stockTable.getValueAt(j, 1);
             codeFrom = String.valueOf(chooseCodeFrom.getSelectedItem());
             codeTo = String.valueOf(chooseCodeTo.getSelectedItem());
         } else {
             converter = new Converter(localRateTable,  bnbRateTable, i, j, 2);
-            afterConvert = converter.convertValue(amountFromField.getValue());
-            checked = Double.parseDouble(amountFromField.getText()) < (double) stockTable.getValueAt(i, 1);
+            afterConvert = converter.convertValue(value);
+            checked = Double.parseDouble(value) < (double) stockTable.getValueAt(i, 1);
             codeFrom = String.valueOf(chooseCodeTo.getSelectedItem());
             codeTo = String.valueOf(chooseCodeFrom.getSelectedItem());
         }
@@ -478,8 +479,8 @@ public class Change extends javax.swing.JFrame {
         if (checked) {
             amountToField.setValue(afterConvert);
             double rate = converter.getRate();
-            double amountFrom = ((Number) amountFromField.getValue()).doubleValue();
-            double amountTo = ((Number) amountToField.getValue()).doubleValue();
+            double amountFrom = Double.parseDouble(amountFromField.getText());
+            double amountTo = Double.parseDouble(amountToField.getText());
             Date currentDay = new Date(new java.util.Date().getTime());
             
             DataBase dataBase = new DataBase();
