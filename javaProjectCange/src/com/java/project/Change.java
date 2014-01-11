@@ -105,7 +105,7 @@ public class Change extends javax.swing.JFrame {
         amountFromField.setValue(new Double(0));
 
         amountToField.setEditable(false);
-        amountToField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
+        amountToField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.0000"))));
         amountToField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         amountToField.setPreferredSize(new java.awt.Dimension(120, 20));
 
@@ -463,13 +463,13 @@ public class Change extends javax.swing.JFrame {
         String codeTo = null;
         
         if (buyRadio.isSelected()) {
-            converter = new Converter(localRateTable, bnbRateTable, i, j, 3);
+            converter = new Converter(localRateTable, bnbRateTable, i, j, 2);
             afterConvert = converter.convertValue(value);
             checked = afterConvert < (double) stockTable.getValueAt(j, 1);
             codeFrom = String.valueOf(chooseCodeFrom.getSelectedItem());
             codeTo = String.valueOf(chooseCodeTo.getSelectedItem());
         } else {
-            converter = new Converter(localRateTable,  bnbRateTable, i, j, 2);
+            converter = new Converter(localRateTable,  bnbRateTable, i, j, 3);
             afterConvert = converter.convertValue(value);
             checked = Double.parseDouble(value) < (double) stockTable.getValueAt(i, 1);
             codeFrom = String.valueOf(chooseCodeTo.getSelectedItem());
