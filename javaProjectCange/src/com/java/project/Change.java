@@ -461,13 +461,13 @@ public class Change extends javax.swing.JFrame {
         
         
         if (buyRadio.isSelected()) {
-            converter = new Converter(localRateTable, bnbRateTable, i, j, 2);
+            converter = new Converter(localRateTable, bnbRateTable, i, j, 3);
             afterConvert = converter.convertValue(amountFromField.getValue());
             checked = afterConvert < (double) stockTable.getValueAt(j, 1);
             codeFrom = String.valueOf(chooseCodeFrom.getSelectedItem());
             codeTo = String.valueOf(chooseCodeTo.getSelectedItem());
         } else {
-            converter = new Converter(localRateTable,  bnbRateTable, j, i, 3);
+            converter = new Converter(localRateTable,  bnbRateTable, i, j, 2);
             afterConvert = converter.convertValue(amountFromField.getValue());
             checked = Double.parseDouble(amountFromField.getText()) < (double) stockTable.getValueAt(i, 1);
             codeFrom = String.valueOf(chooseCodeTo.getSelectedItem());
@@ -506,7 +506,7 @@ public class Change extends javax.swing.JFrame {
     }//GEN-LAST:event_chooseDatePropertyChange
 
     private void aboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutActionPerformed
-        JOptionPane.showMessageDialog(null, "Made by:\nIvo Mishev, Tony Monov,\nChristian Georgiev, Dyan Deyanov");
+        JOptionPane.showMessageDialog(null, "Made by:\nIvo Mishev, Tony Monov,\nChristian Georgiev, Deyan Deyanov");
     }//GEN-LAST:event_aboutActionPerformed
 
     public static void main(String args[]) {
