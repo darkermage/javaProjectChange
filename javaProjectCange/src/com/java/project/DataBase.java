@@ -12,8 +12,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -45,18 +44,16 @@ public class DataBase {
         }
     }
 	
-    public Object[] getCodes() {
-       List<Object> codeName = new ArrayList<>();
+    public DefaultComboBoxModel getCodes() {
+        DefaultComboBoxModel dtm = new DefaultComboBoxModel();
        
         try {
-            pst = conn.prepareCall("SELECT rateName FROM rates"); 
+            pst = conn.prepareCall("SELECT RateName FROM rates"); 
             resultSet = pst.executeQuery();
        
             while (resultSet.next()) {
-                codeName.add(resultSet.getString("RateName"));
+                dtm.addElement(resultSet.getString("RateName"));
             }
-            
-            return codeName.toArray();
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
         } finally {
@@ -72,8 +69,8 @@ public class DataBase {
                 System.err.println(ex.getMessage());
             }
         }
-            
-        return null;
+       
+        return dtm;
     }
     
     public String getLog(Date date) {
@@ -105,7 +102,7 @@ public class DataBase {
         } finally {
             try {
                 if (pst != null) {
-                        pst.close();
+                    pst.close();
                 }
 
                 if (resultSet != null) {
@@ -150,7 +147,7 @@ public class DataBase {
         DefaultTableModel dtm = (DefaultTableModel) table.getModel();
         
         try {
-            pst = conn.prepareStatement("SELECT * FROM rates");
+            pst = conn.prepareStatement("SELECT RateName, Rate FROM rates");
             resultSet = pst.executeQuery();
             
             while (resultSet.next()) {
@@ -181,7 +178,8 @@ public class DataBase {
             resultSet = pst.executeQuery();
             
             while (resultSet.next()) {
-                dtm.addRow(new Object[] { new Integer(resultSet.getString("localId")), resultSet.getString("code"), new Double(resultSet.getString("buy")), new Double(resultSet.getString("sell")) });
+                dtm.addRow(new Object[] { new Integer(resultSet.getString("localId")), resultSet.getString("code"), 
+                    new Double(resultSet.getString("buy")), new Double(resultSet.getString("sell")) });
             }
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
@@ -268,7 +266,7 @@ public class DataBase {
                     
                     pst = conn.prepareStatement("INSERT INTO rates(RateName, Rate) VALUES (?, ?)");
                     pst.setString(1, codeString);
-                    pst.setDouble(2, (1/reverseDouble));
+                    pst.setDouble(2, (1 / reverseDouble));
                     pst.executeUpdate();
                 }
             }
@@ -440,7 +438,7 @@ public class DataBase {
     
     public void updateProfit(Date date, double amount){
         try { 
-            pst = conn.prepareStatement("INSERT INTO profit (date,profit) VALUES (?,?) ON DUPLICATE KEY UPDATE profit=profit+?");
+            pst = conn.prepareStatement("INSERT INTO profit (date, profit) VALUES (?,?) ON DUPLICATE KEY UPDATE profit = profit + ?");
             pst.setDate(1, date);
             pst.setDouble(2, amount);
             pst.setDouble(3, amount);
@@ -460,6 +458,7 @@ public class DataBase {
     
     public double getProfit(Date date) {
         double profit = -1.0D;
+        
         try {
             pst = conn.prepareStatement("SELECT profit FROM profit WHERE date = ?");
             pst.setDate(1, date);
@@ -474,7 +473,7 @@ public class DataBase {
         } finally {
             try {
                 if (pst != null) {
-                        pst.close();
+                    pst.close();
                 }
 
                 if (resultSet != null) {
@@ -484,6 +483,7 @@ public class DataBase {
                 System.err.println(e.getMessage());
             }
         }
+        
         return profit;
     }
 }

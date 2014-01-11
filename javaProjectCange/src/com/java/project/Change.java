@@ -43,8 +43,8 @@ public class Change extends javax.swing.JFrame {
         tabbedPanel = new javax.swing.JTabbedPane();
         buttonGroup = new javax.swing.JPanel();
         converterPanel = new javax.swing.JPanel();
-        amoutFromLabel = new javax.swing.JLabel();
-        amoutToLabel = new javax.swing.JLabel();
+        amountFromLabel = new javax.swing.JLabel();
+        amountToLabel = new javax.swing.JLabel();
         chooseCodeFrom = new javax.swing.JComboBox();
         exchangeButton = new javax.swing.JButton();
         chooseCodeTo = new javax.swing.JComboBox();
@@ -81,11 +81,11 @@ public class Change extends javax.swing.JFrame {
 
         converterPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Converter"));
 
-        amoutFromLabel.setText("Amount");
+        amountFromLabel.setText("Amount");
 
-        amoutToLabel.setText("Amount");
+        amountToLabel.setText("Amount");
 
-        chooseCodeFrom.setModel(new javax.swing.DefaultComboBoxModel(new DataBase().getCodes()));
+        chooseCodeFrom.setModel(new DataBase().getCodes());
         chooseCodeFrom.setPreferredSize(new java.awt.Dimension(120, 20));
 
         exchangeButton.setText("Exchange");
@@ -96,7 +96,7 @@ public class Change extends javax.swing.JFrame {
             }
         });
 
-        chooseCodeTo.setModel(new javax.swing.DefaultComboBoxModel(new DataBase().getCodes()));
+        chooseCodeTo.setModel(new DataBase().getCodes());
         chooseCodeTo.setPreferredSize(new java.awt.Dimension(120, 20));
 
         amountFromField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
@@ -129,7 +129,7 @@ public class Change extends javax.swing.JFrame {
                     .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(amountFromField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(amoutFromLabel, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(amountFromLabel, javax.swing.GroupLayout.Alignment.LEADING))
                         .addComponent(chooseCodeFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGap(20, 20, 20)
                     .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,7 +144,7 @@ public class Change extends javax.swing.JFrame {
                     .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(amountToField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(chooseCodeTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(amoutToLabel))
+                        .addComponent(amountToLabel))
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         converterPanelLayout.setVerticalGroup(
@@ -155,13 +155,13 @@ public class Change extends javax.swing.JFrame {
                     .addGap(17, 17, 17)
                     .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(converterPanelLayout.createSequentialGroup()
-                            .addComponent(amoutToLabel)
+                            .addComponent(amountToLabel)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(amountToField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(40, 40, 40)
                             .addComponent(chooseCodeTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(converterPanelLayout.createSequentialGroup()
-                            .addComponent(amoutFromLabel)
+                            .addComponent(amountFromLabel)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(converterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(amountFromField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -312,6 +312,7 @@ public class Change extends javax.swing.JFrame {
     scrollPanelThree.setViewportView(stockTable);
 
     profitField.setEditable(false);
+    profitField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
     profitField.setText("0");
 
     profitLabel.setText("Profit");
@@ -425,8 +426,8 @@ public class Change extends javax.swing.JFrame {
         public void setValue(Object value) {
             if (formatter == null) {
                 formatter = NumberFormat.getNumberInstance();
-                formatter.setMaximumFractionDigits(5);
-                formatter.setMinimumFractionDigits(2);            
+                formatter.setMaximumFractionDigits(4);
+                formatter.setMinimumFractionDigits(0);
             }
             
             setText((value == null) ? "0" : formatter.format(value));
@@ -459,7 +460,6 @@ public class Change extends javax.swing.JFrame {
         String codeFrom = null;
         String codeTo = null;
         
-        
         if (buyRadio.isSelected()) {
             converter = new Converter(localRateTable, bnbRateTable, i, j, 3);
             afterConvert = converter.convertValue(amountFromField.getValue());
@@ -479,20 +479,20 @@ public class Change extends javax.swing.JFrame {
             double rate = converter.getRate();
             double amountFrom = ((Number) amountFromField.getValue()).doubleValue();
             double amountTo = ((Number) amountToField.getValue()).doubleValue();
-
+            Date currentDay = new Date(new java.util.Date().getTime());
+            
             DataBase dataBase = new DataBase();
             dataBase.changeCurrencyInStock(amountFrom, codeFrom,  amountTo, codeTo);
-            dataBase.updateLog(new Date(new java.util.Date().getTime()), codeFrom, amountFrom, rate, 
-                    codeTo, amountTo);
-            dataBase.updateProfit(new Date(new java.util.Date().getTime()),converter.getProfit());
+            dataBase.updateLog(currentDay, codeFrom, amountFrom, rate, codeTo, amountTo);
+            dataBase.updateProfit(currentDay, converter.getProfit());
+            
+            this.clearContent(stockTable);
+            dataBase.updateStockTable(stockTable);
             
             if (invoiceCheck.isSelected()) {
                 new InvoiceDialog(this, true, codeFrom, amountFrom, rate, codeTo, amountTo).setVisible(true);
                 invoiceCheck.setSelected(false);
             }
-            
-            this.clearContent(stockTable);
-            dataBase.updateStockTable(stockTable);
         } else {
             JOptionPane.showMessageDialog(null, "Not enough in stock");
         }
@@ -500,8 +500,10 @@ public class Change extends javax.swing.JFrame {
 
     private void chooseDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_chooseDatePropertyChange
         if (evt.getPropertyName().equals("date")) {
-            logArea.setText(new DataBase().getLog(new java.sql.Date(chooseDate.getDate().getTime())));
-            profitField.setValue(new DataBase().getProfit(new java.sql.Date(chooseDate.getDate().getTime())));
+            Date currentDay = new java.sql.Date(chooseDate.getDate().getTime());
+            
+            logArea.setText(new DataBase().getLog(currentDay));
+            profitField.setValue(new DataBase().getProfit(currentDay));
         }
     }//GEN-LAST:event_chooseDatePropertyChange
 
@@ -520,9 +522,9 @@ public class Change extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem about;
     private javax.swing.JFormattedTextField amountFromField;
+    private javax.swing.JLabel amountFromLabel;
     private javax.swing.JFormattedTextField amountToField;
-    private javax.swing.JLabel amoutFromLabel;
-    private javax.swing.JLabel amoutToLabel;
+    private javax.swing.JLabel amountToLabel;
     private javax.swing.JLabel bnbLabel;
     private javax.swing.JTable bnbRateTable;
     private javax.swing.JPanel buttonGroup;
