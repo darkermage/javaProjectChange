@@ -479,8 +479,8 @@ public class Change extends javax.swing.JFrame {
         if (checked) {
             amountToField.setValue(afterConvert);
             double rate = converter.getRate();
-            double amountFrom = Double.parseDouble(amountFromField.getText());
-            double amountTo = Double.parseDouble(amountToField.getText());
+            double amountFrom = Double.parseDouble(value);
+            double amountTo = Double.parseDouble(amountToField.getText().replace(',', '.'));
             Date currentDay = new Date(new java.util.Date().getTime());
             
             DataBase dataBase = new DataBase();
