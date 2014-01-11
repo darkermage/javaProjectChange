@@ -439,10 +439,11 @@ public class DataBase {
     }
     
     public void updateProfit(Date date, double amount){
-        try {
-            pst = conn.prepareStatement("REPLACE INTO profit( `date`, `profit` ) VALUES( ?, ? )");
-            pst.setDouble(2, amount);
+        try { 
+            pst = conn.prepareStatement("INSERT INTO profit (date,profit) VALUES (?,?) ON DUPLICATE KEY UPDATE profit=profit+?");
             pst.setDate(1, date);
+            pst.setDouble(2, amount);
+            pst.setDouble(3, amount);
             pst.executeUpdate();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
