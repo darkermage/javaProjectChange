@@ -28,12 +28,32 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+/** 
+ * A class used for working with the database. Here are all of the methods for 
+ * establishing a connection to the database and working with the different 
+ * tables from that database.
+ * 
+ * @author Ivo Mishev 
+ * @author Kristiyan Georgiev
+ * @author Tony Monov
+ * @author Deyan Deyanov 
+ * 
+ */
 public class DataBase {
 
     private Connection conn;
     private PreparedStatement pst;
     private ResultSet resultSet;
     
+    /**
+     * No argument constructor that establishes a connection with the database. 
+     * A proper driver is required in order for the connection to be successful.
+     * MySQL connector 5.1.28 is the driver, used during the writing of the program.
+     * 
+     * <p>
+     * If the connection fails, the program execution terminates, because the 
+     * database is vital for the program.
+     */
     public DataBase() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -43,7 +63,14 @@ public class DataBase {
             System.exit(1);
         }
     }
-	
+    
+    /**
+     * A method that takes the names of the different currencies from the "rates"
+     * table in the database.
+     * 
+     * @return DefaultComboBoxModel, containing the names of all the different
+     *         currencies.
+     */
     public DefaultComboBoxModel getCodes() {
         DefaultComboBoxModel dtm = new DefaultComboBoxModel();
        
@@ -73,6 +100,15 @@ public class DataBase {
         return dtm;
     }
     
+    /**
+     * The method is collecting data from the database for all of the transactions
+     * made on that date.
+     * 
+     * @param  date The date for which the log will be generated.
+     * 
+     * @return  A String, containing all of the transactions made on this 
+     *          particular date.
+     */
     public String getLog(Date date) {
         try {
             pst = conn.prepareStatement("SELECT * FROM log WHERE date = ?");
@@ -116,6 +152,15 @@ public class DataBase {
         return null;
     }
     
+    /**
+     * A method for updating the content of the stock table in the "Cashier" tab.
+     * The data inserted in the table is extracted with a query from the "stock"
+     * table in the database.
+     * 
+     * @param table The JTable object which will be updated with the data collected 
+     *              with the query to the "stock" table.
+     * 
+     */
     public void updateStockTable(JTable table) {
         DefaultTableModel dtm = (DefaultTableModel) table.getModel();
         
@@ -143,6 +188,17 @@ public class DataBase {
         }
     }
     
+    /**
+     * A method for updating the content of the bnbRates table in the "Rates" tab.
+     * <p>
+     * That table is holding the original currency rates from BNB's site.
+     * <p>
+     * The data inserted in the table is extracted from the "rates" table in the
+     * database.
+     * 
+     * @param table The JTable object which will be updated
+     * 
+     */
     public void updateBNBTable(JTable table) {
         DefaultTableModel dtm = (DefaultTableModel) table.getModel();
         
@@ -170,6 +226,18 @@ public class DataBase {
         }
     }
     
+    /**
+     * A method for updating the content of the localRates table in the "Rates" tab.
+     * <p>
+     * That table is holding the local (buy and sell) rates, used for the actual 
+     * exchange.
+     * <p>
+     * The data inserted in the table is extracted from the "local" table in the
+     * database.
+     * 
+     * @param table The JTable object which will be updated
+     * 
+     */
     public void updateLocalTable(JTable table) {
         DefaultTableModel dtm = (DefaultTableModel) table.getModel();
         
@@ -198,6 +266,13 @@ public class DataBase {
         }
     }
     
+    /**
+     * A method for getting all of the currencies names and rates from the BNB's site. 
+     * First the "Rates" table in the database is truncated (this is useful when
+     * the table is updated). Then the XML file from BNB's site, containing all 
+     * of the rates is parsed and the gathered information is inserted into the 
+     * database (in the "Rates" table).
+     */
     public void updateCurrency() {
         try {
             pst = conn.prepareStatement("truncate table Rates");
@@ -288,7 +363,19 @@ public class DataBase {
             }
         }
     }
-	
+    
+    /**
+     * A method for updating the "log" table in the database. That method is used 
+     * every time when a transaction is made.
+     * 
+     * @param date          The date when the transaction was made.
+     * @param currencyFrom  The name of the input currency.
+     * @param amountFrom    The amount of the input currency.
+     * @param rate          The exchange rate.
+     * @param currencyTo    The name of the output currency.
+     * @param amountTo      The amount of the output currency.
+     * 
+     */
     public void updateLog(Date date, String currencyFrom, double amountFrom, double rate, String currencyTo, double amountTo) {
         try {
             pst = conn.prepareStatement("INSERT INTO log(`date`, `currency_from`, `currency_from_amount`, `rate`, `currency_to`, `currency_to_amount`) VALUES(?,?,?,?,?,?)");
@@ -312,6 +399,10 @@ public class DataBase {
         }
     }
     
+    /**
+     * A method that fills the "stock" table in the database. That table is holding
+     * the amount that we have from each currency.
+     */
     public void fillStockTable(){
         try{
             pst = conn.prepareStatement("truncate table stock");
@@ -337,6 +428,13 @@ public class DataBase {
         }
     }
     
+    /**
+     * A method for updating the "stock" table in the database.
+     * 
+     * @param amount    The amount that will be assigned to the currency which
+     *                  will be updated.
+     * @param stockId   The ID of the currency which will be updated.
+     */
     public void updateStock(double amount,int stockId) {
         try{
             pst = conn.prepareStatement("UPDATE stock SET stock = ? WHERE stockid = ?");
@@ -356,6 +454,14 @@ public class DataBase {
         }
     }
     
+    /**
+     * A method for updating the "local" table in the database. That table is holding
+     * the buy and sell rates that we have chosen to use for the transactions.
+     * 
+     * @param localId   The ID of the currency which will be updated
+     * @param buy       The Buy rate for that currency
+     * @param sell      The Sell rate for that currency
+     */
     public void updateLocal(int localId, double buy, double sell) {
         try{
             pst = conn.prepareStatement("UPDATE local SET buy = ?, sell = ? WHERE localid = ?");
@@ -376,6 +482,16 @@ public class DataBase {
         }
     }
     
+    /**
+     * A method that is used for changing the amount that we have for (codeFrom and codeTo)
+     * currencies. That method is used every time when a transaction is made.
+     * 
+     * @param amountFrom    The amount that we have from the input currency
+     * @param codeFrom      The name of the input currency
+     * @param amountTo      The amount that we have from the output currency
+     * @param codeTo        The name of the output currency
+     * 
+     */
     public void changeCurrencyInStock(double amountFrom, String codeFrom, double amountTo, String codeTo) {
         try {
             pst = conn.prepareStatement("SELECT * FROM stock WHERE code = ?");
@@ -436,6 +552,17 @@ public class DataBase {
         }
     }
     
+    /**
+     * A method for updating the "profit" table in the database.
+     * That method is used every time when a transaction is made.
+     * <p>
+     * If that date exist in the table in the database, the profit for that date
+     * is updated. If the date do not exist, a new entry is inserted in the 
+     * database.
+     * 
+     * @param date      The date when the transaction is made
+     * @param amount    The profit from that transaction
+     */
     public void updateProfit(Date date, double amount){
         try { 
             pst = conn.prepareStatement("INSERT INTO profit (date, profit) VALUES (?,?) ON DUPLICATE KEY UPDATE profit = profit + ?");
@@ -456,6 +583,14 @@ public class DataBase {
         }
     }
     
+    /**
+     * A method for getting the profit for a particular date. That method is used
+     * when a log has to be generated.
+     * 
+     * @param date  The date for which the profit should be extracted from the 
+     *              database
+     * @return      The profit for that date
+     */
     public double getProfit(Date date) {
         double profit = -1.0D;
         

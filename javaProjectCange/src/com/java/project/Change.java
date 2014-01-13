@@ -8,8 +8,24 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+  
+/**
+ * The class containing the GUI.
+ * 
+ * @author Ivo Mishev 
+ * @author Kristiyan Georgiev
+ * @author Tony Monov
+ * @author Deyan Deyanov 
+ */
 public class Change extends javax.swing.JFrame {
 
+    /**
+     * A no argument constructor. The constructor initializes all of the graphical
+     * components, calls the method that is parsing the XML file, containing the
+     * name of the currencies and the exchange rates, updates the "rates", "local"
+     * and "stock" tables in the database and adds the values in the localRatesTable
+     * in the "Rates" tab.
+     */    
     public Change() {
         initComponents();
         
@@ -417,6 +433,10 @@ public class Change extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+    * A custom DataRenderer class used for outputting numeric values in the
+    * tables cells.
+    */  
     static class DataRenderer extends DefaultTableCellRenderer {
         
         private NumberFormat formatter;
@@ -435,7 +455,12 @@ public class Change extends javax.swing.JFrame {
             setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         }
     }
-
+    
+    /**
+     * A method for deleting the content of a table in the GUI.
+     * 
+     * @param table     The table which will be emptied
+     */
     private void clearContent(javax.swing.JTable table) {
         DefaultTableModel dtm = (DefaultTableModel) table.getModel();
         
@@ -444,13 +469,29 @@ public class Change extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Event handling method used when the Update button in the "Rates" tab is
+     * pressed. The method is parsing new XML file from BNB's site and then 
+     * inserts the new data in the "rates" table in the database and in the 
+     * bnbRateTable in the "Rates" tab.
+     * 
+     * @param evt 
+     */
     private void updateRateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateRateButtonActionPerformed
         this.clearContent(bnbRateTable);
         DataBase dataBase = new DataBase();
         dataBase.updateCurrency();
         dataBase.updateBNBTable(bnbRateTable);
     }//GEN-LAST:event_updateRateButtonActionPerformed
-
+    
+    /**
+     * Event handling method used when the Exchange button in the "Rates" tab is
+     * pressed. The method does the exchanging and then updates the "log", "profit"
+     * and "stock" table in the database and updates the stock table in the
+     * "Cashiers" tab.
+     * 
+     * @param evt 
+     */
     private void exchangeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exchangeButtonActionPerformed
         int i = chooseCodeFrom.getSelectedIndex();
         int j = chooseCodeTo.getSelectedIndex();
@@ -500,6 +541,11 @@ public class Change extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_exchangeButtonActionPerformed
 
+    /**
+     * Event handling method used for generating a log.
+     * 
+     * @param evt 
+     */
     private void chooseDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_chooseDatePropertyChange
         if (evt.getPropertyName().equals("date")) {
             Date currentDay = new java.sql.Date(chooseDate.getDate().getTime());
@@ -510,7 +556,7 @@ public class Change extends javax.swing.JFrame {
     }//GEN-LAST:event_chooseDatePropertyChange
 
     private void aboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutActionPerformed
-        JOptionPane.showMessageDialog(null, "Made by:\nIvo Mishev, Tony Monov,\nChristian Georgiev, Deyan Deyanov");
+        JOptionPane.showMessageDialog(null, "Made by:\nIvo Mishev, Tony Monov,\nKristiyan Georgiev, Deyan Deyanov");
     }//GEN-LAST:event_aboutActionPerformed
 
     public static void main(String args[]) {

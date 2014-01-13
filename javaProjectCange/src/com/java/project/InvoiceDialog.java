@@ -1,9 +1,31 @@
 package com.java.project;
 
+/**
+ * A class that contains a dialog window used to collect from the customer the
+ * information needed to generate an invoice.
+ * 
+ * @author Ivo Mishev 
+ * @author Kristiyan Georgiev
+ * @author Tony Monov
+ * @author Deyan Deyanov 
+ */
+
 public class InvoiceDialog extends javax.swing.JDialog {
 
     private static String codeFrom, codeTo;
     private static double amountFrom, rate, amountTo;
+    
+     /**
+     * 7 - Argument constructor.
+     * 
+     * @param parent        The owner of the dialog
+     * @param modal         The specified modality
+     * @param codeFrom      The name of the input currency
+     * @param amountFrom    The amount from the input currency
+     * @param rate          The rate used for the exchange
+     * @param codeTo        The name of the output currency
+     * @param amountTo      The amount from the output currency
+     */
     
     public InvoiceDialog(java.awt.Frame parent, boolean modal, String codeFrom, double amountFrom, double rate, String codeTo, double amountTo) {
         super(parent, modal);
